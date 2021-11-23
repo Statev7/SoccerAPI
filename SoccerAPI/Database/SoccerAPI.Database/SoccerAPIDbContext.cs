@@ -12,7 +12,15 @@
 
         public DbSet<Coach> Coaches { get; set; }
 
+        public DbSet<Footballer> Footballers { get; set; }
+
+        public DbSet<Championship> Championships { get; set; }
+
         public DbSet<TeamCoachMapping> TeamCoachMapping { get; set; }
+
+        public DbSet<TeamFootballerMapping> TeamFootballerMapping { get; set; }
+
+        public DbSet<TeamChampionshipMapping> TeamChampionshipMapping { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

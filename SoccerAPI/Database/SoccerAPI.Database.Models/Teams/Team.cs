@@ -11,6 +11,8 @@
             : base()
         {
             this.Coaches = new HashSet<TeamCoachMapping>();
+            this.Footballers = new HashSet<TeamFootballerMapping>();
+            this.Championships = new HashSet<TeamChampionshipMapping>();
         }
 
         public string Name { get; set; }
@@ -24,5 +26,9 @@
         public string Country { get; set; }
 
         public virtual ICollection<TeamCoachMapping> Coaches { get; set; }
+
+        public virtual ICollection<TeamFootballerMapping> Footballers { get; set; }
+
+        public virtual ICollection<TeamChampionshipMapping> Championships { get; set; }
     }
 }

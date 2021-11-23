@@ -8,6 +8,7 @@
     public class Coach : Person
     {
         public Coach()
+            :base()
         {
 
         }
