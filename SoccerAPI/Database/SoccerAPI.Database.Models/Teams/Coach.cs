@@ -5,7 +5,7 @@
 
     using SoccerAPI.Database.Models.BaseModels;
 
-    public class Coach : Person
+    public class Coach : Employee
     {
         public Coach()
             :base()

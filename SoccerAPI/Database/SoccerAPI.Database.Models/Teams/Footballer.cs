@@ -2,7 +2,7 @@
 
 namespace SoccerAPI.Database.Models.Teams
 {
-    public class Footballer : Person
+    public class Footballer : Employee
     {
         public Footballer()
             :base()
