@@ -19,8 +19,6 @@
 
         public string Nickname { get; set; }
 
-        public DateTime Founded { get; set; }
-
         public string Stadium { get; set; }
 
         public string Country { get; set; }
