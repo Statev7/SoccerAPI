@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -6,14 +6,13 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Database\SoccerAPI.Database.Models\SoccerAPI.Database.Models.csproj" />
     <ProjectReference Include="..\..\Database\SoccerAPI.Database\SoccerAPI.Database.csproj" />
     <ProjectReference Include="..\SoccerAPI.DTOs\SoccerAPI.DTOs.csproj" />
-    <ProjectReference Include="..\SoccerAPI.Services\SoccerAPI.Services.csproj" />
   </ItemGroup>
 
 </Project>

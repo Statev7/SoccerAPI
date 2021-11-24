@@ -3,6 +3,7 @@ namespace SoccerAPI
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Builder;
@@ -16,6 +17,8 @@ namespace SoccerAPI
     using Microsoft.OpenApi.Models;
 
     using SoccerAPI.Database;
+    using SoccerAPI.Services.Database;
+    using SoccerAPI.Services.Database.Contracts;
 
     public class Startup
     {
@@ -37,6 +40,10 @@ namespace SoccerAPI
             });
 
             services.AddDbContext<SoccerAPIDbContext>();
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            this.AddDatabaseServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +66,11 @@ namespace SoccerAPI
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void AddDatabaseServices(IServiceCollection services)
+        {
+            services.AddScoped<ITeamService, TeamService>();
         }
     }
 }
