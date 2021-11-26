@@ -4,7 +4,7 @@
 
     using SoccerAPI.Common.Constants.ModelConstants;
 
-    public class PostTeamDTO
+    public class PutTeamDTO
     {
         [Required]
         [MinLength(TeamConstants.NAME_MIN_LENGHT)]

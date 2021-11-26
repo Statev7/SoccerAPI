@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -57,6 +58,58 @@
             await this.DbContext.SaveChangesAsync();
             
             return teamToAdd;
+        }
+
+        public async Task<bool> UpdateAsync(Guid id, PutTeamDTO team)
+        {
+            Team teamToUpdate = await this.GetByIdAsync<Team>(id);
+
+            if (teamToUpdate == null)
+            {
+                return false;
+            }
+
+            Team updatedTeam = this.Mapper.Map(team, teamToUpdate);
+
+            updatedTeam.UpdatedOn = DateTime.UtcNow;
+
+            this.DbContext.Update(updatedTeam);
+            await this.DbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> PartialUpdateAsync(Guid id, PatchTeamDTO team)
+        {
+            Team teamToUpdate = await this.GetByIdAsync<Team>(id);
+
+            if (teamToUpdate == null)
+            {
+                return false;
+            }
+
+            PropertyInfo[] properties = team.GetType().GetProperties();
+            PropertyInfo[] teamToUpdateProperties = teamToUpdate.GetType().GetProperties();
+
+            foreach (var property in properties)
+            {
+                foreach (var propertyToUpdate in teamToUpdateProperties)
+                {
+                    var propertyValue = property.GetValue(team);
+                    if (propertyValue != null && property.Name == propertyToUpdate.Name)
+                    {
+                        propertyToUpdate.SetValue(teamToUpdate, propertyValue);
+                        break;
+                    }
+                }
+            }
+
+            teamToUpdate.UpdatedOn = DateTime.UtcNow;
+
+            this.DbContext.Update(teamToUpdate);
+            await this.DbContext.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> DeleteAsync(Guid id)

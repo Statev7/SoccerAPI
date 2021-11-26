@@ -1,7 +1,6 @@
 ﻿namespace SoccerAPI.Services.Database.Contracts
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using SoccerAPI.Database.Models.Teams;
@@ -14,6 +13,10 @@
         Task<T> GetByIdAsync<T>(Guid id);
 
         Task<Team> AddAsync(PostTeamDTO team);
+
+        Task<bool> UpdateAsync(Guid id, PutTeamDTO team);
+
+        Task<bool> PartialUpdateAsync(Guid id, PatchTeamDTO team);
 
         Task<bool> DeleteAsync(Guid id);
     }

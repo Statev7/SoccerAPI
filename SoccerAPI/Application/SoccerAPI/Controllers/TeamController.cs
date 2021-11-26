@@ -24,6 +24,11 @@
 		{
 			GetTeamDTO team = await this.teamService.GetByIdAsync<GetTeamDTO>(id);
 
+            if (team == null)
+            {
+				return this.NotFound();
+            }
+
 			return this.Ok(team);
 		}
 
@@ -36,19 +41,48 @@
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Post(PostTeamDTO model)
+		public async Task<IActionResult> Post(PostTeamDTO team)
 		{
-			Team createdTeam = await this.teamService.AddAsync(model);
+			Team createdTeam = await this.teamService.AddAsync(team);
 
 			return this.CreatedAtRoute(this.RouteData, createdTeam);
 		}
 
+		[HttpPut]
+		[Route("{id}")]
+		public async Task<IActionResult> Put(Guid id, PutTeamDTO team)
+        {
+			bool result = await this.teamService.UpdateAsync(id, team);
+
+            if (result == false)
+            {
+				return this.BadRequest();
+            }
+
+			return this.Ok(result);
+		}
+
+		[HttpPatch]
+		[Route("{id}")]
+		public async Task<IActionResult> Patch(Guid id, PatchTeamDTO team)
+		{
+			bool result = await this.teamService.PartialUpdateAsync(id, team);
+
+			return this.Ok(result);
+		}
+
 		[HttpDelete]
+		[Route("{id}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{
-			bool isDeleted = await this.teamService.DeleteAsync(id);
+			bool result = await this.teamService.DeleteAsync(id);
 
-			return this.Ok(isDeleted);
+            if (result == false)
+            {
+				return this.BadRequest("Something went wrong!");
+            }
+
+			return this.Ok(result);
 		}
 	}
 }

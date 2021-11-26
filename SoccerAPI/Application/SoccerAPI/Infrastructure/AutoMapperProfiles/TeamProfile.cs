@@ -16,6 +16,8 @@
 
             this.CreateMap<IEnumerable<Team>, GetAllTeamsDTO>()
                 .ForMember(gat => gat.Teams, t => t.MapFrom(teams => teams));
+
+            this.CreateMap<PutTeamDTO, Team>();
         }
     }
 }
