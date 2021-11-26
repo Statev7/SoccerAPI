@@ -1,19 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Database\SoccerAPI.Database\SoccerAPI.Database.csproj" />
-    <ProjectReference Include="..\SoccerAPI.DTOs\SoccerAPI.DTOs.csproj" />
-    <ProjectReference Include="..\SoccerAPI.Services\SoccerAPI.Services.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="10.1.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Database\SoccerAPI.Database\SoccerAPI.Database.csproj" />
+		<ProjectReference Include="..\SoccerAPI.DTOs\SoccerAPI.DTOs.csproj" />
+		<ProjectReference Include="..\SoccerAPI.Services\SoccerAPI.Services.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="SoccerAPI.xml">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>
