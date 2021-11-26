@@ -49,6 +49,7 @@
         /// <returns>Returns all teame</returns>
         /// <response code="200">Returns all teams</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Get()
         {
             GetAllTeamsDTO teams = await this.teamService.GetAllAsync<GetAllTeamsDTO>();
@@ -76,6 +77,8 @@
         /// <response code="200">If the team is created successfully</response>
         /// <response code="400">If the body is not correct</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post(PostTeamDTO team)
         {
             Team createdTeam = await this.teamService.AddAsync(team);
@@ -105,6 +108,8 @@
         /// <response code="400">If the team is not correct</response>
         [HttpPut]
         [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(Guid id, PutTeamDTO team)
         {
             bool result = await this.teamService.UpdateAsync(id, team);
@@ -139,6 +144,8 @@
         /// <response code="400">If the team is not correct</response>
         [HttpPatch]
         [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Patch(Guid id, PatchTeamDTO team)
         {
             bool result = await this.teamService.PartialUpdateAsync(id, team);
@@ -155,6 +162,8 @@
 		/// <response code="400">If the team is null</response>
         [HttpDelete]
         [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(Guid id)
         {
             bool result = await this.teamService.DeleteAsync(id);
