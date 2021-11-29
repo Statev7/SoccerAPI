@@ -1,7 +1,10 @@
-﻿using SoccerAPI.Database.Models.BaseModels;
-
-namespace SoccerAPI.Database.Models.Teams
+﻿namespace SoccerAPI.Database.Models.Teams
 {
+    using System.ComponentModel.DataAnnotations;
+
+    using SoccerAPI.Common.Constants.ModelConstants;
+    using SoccerAPI.Database.Models.BaseModels;
+
     public class Footballer : Employee
     {
         public Footballer()
@@ -10,8 +13,13 @@ namespace SoccerAPI.Database.Models.Teams
             
         }
 
+        [Required]
+        [MinLength(FootballerConstants.POSITION_MIN_LENGHT)]
+        [MaxLength(FootballerConstants.POSITION_MAX_LENGHT)]
         public string Position { get; set; }
 
+        [Required]
+        [MaxLength(FootballerConstants.STRONG_LEG_MAX_VALUE)]
         public string StrongLeg { get; set; }
 
         public virtual Team Team { get; set; }
