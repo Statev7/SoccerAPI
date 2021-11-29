@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
+    using SoccerAPI.Common.Constants;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Team;
     using SoccerAPI.Services.Database.Contracts;
@@ -116,7 +117,7 @@
 
             if (result == false)
             {
-                return this.BadRequest();
+                return this.BadRequest(ExceptionMessages.SOMETHING_WENT_WRONG_MESSAGE);
             }
 
             return this.Ok(result);
@@ -170,7 +171,7 @@
 
             if (result == false)
             {
-                return this.BadRequest("Something went wrong!");
+                return this.BadRequest(ExceptionMessages.SOMETHING_WENT_WRONG_MESSAGE);
             }
 
             return this.Ok(result);
