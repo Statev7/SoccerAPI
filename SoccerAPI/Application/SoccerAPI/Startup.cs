@@ -77,6 +77,7 @@ namespace SoccerAPI
         private void AddDatabaseServices(IServiceCollection services)
         {
             services.AddScoped<ITeamService, TeamService>();
+            services.AddScoped<IFootballerService, FootballerService>();
         }
     }
 }
