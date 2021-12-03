@@ -14,13 +14,21 @@
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Team;
     using SoccerAPI.Services.Database.Contracts;
+    using SoccerAPI.Services.Validator;
 
     public class TeamService : BaseService<Team>, ITeamService
     {
-        public TeamService(SoccerAPIDbContext dbContext, IMapper mapper)
+        private readonly IFootballerService footballerService;
+        private readonly ITeamFootballerMappingService teamFootballerMappingService;
+
+        public TeamService(SoccerAPIDbContext dbContext, 
+            IMapper mapper, 
+            IFootballerService footballerService,
+            ITeamFootballerMappingService teamFootballerMappingService)
             : base(dbContext, mapper)
         {
-            
+            this.footballerService = footballerService;
+            this.teamFootballerMappingService = teamFootballerMappingService;
         }
 
         public async Task<T> GetAllAsync<T>()
@@ -56,7 +64,7 @@
 
             await this.DbSet.AddAsync(teamToAdd);
             await this.DbContext.SaveChangesAsync();
-            
+
             return teamToAdd;
         }
 
@@ -89,18 +97,31 @@
             }
 
             PropertyInfo[] properties = team.GetType().GetProperties();
-            PropertyInfo[] teamToUpdateProperties = teamToUpdate.GetType().GetProperties();
-
             foreach (var property in properties)
             {
-                foreach (var propertyToUpdate in teamToUpdateProperties)
+                var propertyValue = property.GetValue(team);
+
+                bool isNullOrDefault = Validator.IsNullOrDefault<object>(propertyValue);
+                if (isNullOrDefault == false)
                 {
-                    var propertyValue = property.GetValue(team);
-                    if (propertyValue != null && property.Name == propertyToUpdate.Name)
+                    Type propertyType = property.PropertyType;
+                    bool isIEnumerable = propertyType.IsGenericType
+                        && propertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>);
+
+                    if (isIEnumerable)
                     {
-                        propertyToUpdate.SetValue(teamToUpdate, propertyValue);
-                        break;
+                        switch (property.Name)
+                        {
+                            case "FootballersId":
+                                await this.AddFootballersToTeamAsync(team, teamToUpdate, property);
+                                break;
+                        }
+
+                        continue;
                     }
+
+                    PropertyInfo propertyToUpdate = teamToUpdate.GetType().GetProperty(property.Name);
+                    propertyToUpdate.SetValue(teamToUpdate, propertyValue);
                 }
             }
 
@@ -125,6 +146,31 @@
             await this.DbContext.SaveChangesAsync();
 
             return true;
+        }
+
+        private async Task AddFootballersToTeamAsync(PatchTeamDTO team, Team teamToUpdate, PropertyInfo property)
+        {
+            IEnumerable<Guid> ids = property.GetValue(team) as IEnumerable<Guid>;
+            foreach (var id in ids)
+            {
+                Footballer footballerToAdd = await this.footballerService.GetByIdAsync<Footballer>(id);
+                if (footballerToAdd == null)
+                {
+                    continue;
+                }
+
+                bool isAlreadyExist = teamToUpdate.Footballers.Any(tfm => tfm.TeamId == teamToUpdate.Id && tfm.FootballerId == id);
+                if (isAlreadyExist)
+                {
+                    continue;
+                }
+
+                TeamFootballerMapping teamFootballerMapping = new TeamFootballerMapping();
+                teamFootballerMapping.FootballerId = id;
+                teamFootballerMapping.TeamId = teamToUpdate.Id;
+
+                await this.teamFootballerMappingService.AddAsync<TeamFootballerMapping>(teamFootballerMapping);
+            }
         }
     }
 }

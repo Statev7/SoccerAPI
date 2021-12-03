@@ -12,6 +12,7 @@
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Footballer;
+    using SoccerAPI.Services.Validator;
     using SoccerAPI.Services.Database.Contracts;
 
     public class FootballerService : BaseService<Footballer>, IFootballerService
@@ -83,8 +84,8 @@
             {
                 var propertyValue = property.GetValue(footballer);
 
-                bool isValid = this.IsNullOrDefault<object>(propertyValue);
-                if (isValid == false)
+                bool isNullOrDefault = Validator.IsNullOrDefault<object>(propertyValue);
+                if (isNullOrDefault == false)
                 {
                     PropertyInfo propertyToUpdate = footballerToUpdate.GetType().GetProperty(property.Name);
                     propertyToUpdate.SetValue(footballerToUpdate, propertyValue);
@@ -112,36 +113,6 @@
             await this.DbContext.SaveChangesAsync();
 
             return true;
-        }
-
-        private bool IsNullOrDefault<T>(T argument)
-        {
-            // deal with normal scenarios
-            if (argument == null)
-            {
-                return true;
-            }
-            if (object.Equals(argument, default(T)))
-            {
-                return true;
-            }
-
-            // deal with non-null nullables
-            Type methodType = typeof(T);
-            if (Nullable.GetUnderlyingType(methodType) != null)
-            {
-                return false;
-            }
-
-            // deal with boxed value types
-            Type argumentType = argument.GetType();
-            if (argumentType.IsValueType && argumentType != methodType)
-            {
-                object obj = Activator.CreateInstance(argument.GetType());
-                return obj.Equals(argument);
-            }
-
-            return false;
         }
     }
 }

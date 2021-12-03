@@ -1,5 +1,7 @@
 ﻿namespace SoccerAPI.DTOs.Team
 {
+    using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using SoccerAPI.Common.Constants.ModelConstants;
@@ -20,5 +22,7 @@
 
         [MaxLength(TeamConstants.COUNTRY_MAX_LENGHT)]
         public string Country { get; set; }
+
+        public IEnumerable<Guid> FootballersId { get; set; }
     }
 }

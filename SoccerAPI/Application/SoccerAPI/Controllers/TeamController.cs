@@ -135,6 +135,9 @@
         ///        "nickname": "TeamNickname",
         ///        "stadium": "TeamStadium",
         ///        "country": "TeamCountry"
+        ///        "footballersId: [
+        ///             "FootballerId"
+        ///        ]
         ///     }
         ///
         /// </remarks>
