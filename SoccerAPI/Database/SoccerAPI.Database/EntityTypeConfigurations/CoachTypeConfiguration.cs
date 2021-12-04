@@ -5,10 +5,10 @@
 
     using SoccerAPI.Database.Models.Teams;
 
-    public class TeamCoachTypeConfiguration : IEntityTypeConfiguration<TeamCoachMapping>
+    public class CoachTypeConfiguration : IEntityTypeConfiguration<Coach>
     {
         
-        public void Configure(EntityTypeBuilder<TeamCoachMapping> builder)
+        public void Configure(EntityTypeBuilder<Coach> builder)
         {
             builder
                 .HasOne(tcm => tcm.Team)

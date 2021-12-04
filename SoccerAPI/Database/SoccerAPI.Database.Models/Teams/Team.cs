@@ -12,7 +12,7 @@
         public Team()
             : base()
         {
-            this.Coaches = new HashSet<TeamCoachMapping>();
+            this.Coaches = new HashSet<Coach>();
             this.Footballers = new HashSet<TeamFootballerMapping>();
             this.Championships = new HashSet<TeamChampionshipMapping>();
         }
@@ -36,7 +36,7 @@
         [MaxLength(TeamConstants.COUNTRY_MAX_LENGHT)]
         public string Country { get; set; }
 
-        public virtual ICollection<TeamCoachMapping> Coaches { get; set; }
+        public virtual ICollection<Coach> Coaches { get; set; }
 
         public virtual ICollection<TeamFootballerMapping> Footballers { get; set; }
 

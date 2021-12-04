@@ -1,5 +1,6 @@
 ﻿namespace SoccerAPI.Database.Models.Teams
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using SoccerAPI.Common.Constants.ModelConstants;
@@ -22,6 +23,6 @@
         [MaxLength(FootballerConstants.STRONG_LEG_MAX_VALUE)]
         public string StrongLeg { get; set; }
 
-        public virtual Team Team { get; set; }
+        public virtual ICollection<TeamFootballerMapping> Teams { get; set; }
     }
 }

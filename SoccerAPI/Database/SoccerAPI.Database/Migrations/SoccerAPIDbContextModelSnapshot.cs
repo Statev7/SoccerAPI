@@ -55,18 +55,24 @@ namespace SoccerAPI.Database.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("Nationality")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("SecondName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
-                    b.Property<Guid?>("TeamId")
+                    b.Property<Guid>("TeamId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("UpdatedOn")
@@ -92,32 +98,37 @@ namespace SoccerAPI.Database.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("Nationality")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Position")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("SecondName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("StrongLeg")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("TeamId")
-                        .HasColumnType("uniqueidentifier");
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TeamId");
 
                     b.ToTable("Footballers");
                 });
@@ -129,19 +140,27 @@ namespace SoccerAPI.Database.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Nickname")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Stadium")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -178,33 +197,6 @@ namespace SoccerAPI.Database.Migrations
                     b.ToTable("TeamChampionshipMapping");
                 });
 
-            modelBuilder.Entity("SoccerAPI.Database.Models.Teams.TeamCoachMapping", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CoachId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("TeamId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CoachId");
-
-                    b.HasIndex("TeamId");
-
-                    b.ToTable("TeamCoachMapping");
-                });
-
             modelBuilder.Entity("SoccerAPI.Database.Models.Teams.TeamFootballerMapping", b =>
                 {
                     b.Property<Guid>("Id")
@@ -235,17 +227,10 @@ namespace SoccerAPI.Database.Migrations
             modelBuilder.Entity("SoccerAPI.Database.Models.Teams.Coach", b =>
                 {
                     b.HasOne("SoccerAPI.Database.Models.Teams.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId");
-
-                    b.Navigation("Team");
-                });
-
-            modelBuilder.Entity("SoccerAPI.Database.Models.Teams.Footballer", b =>
-                {
-                    b.HasOne("SoccerAPI.Database.Models.Teams.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId");
+                        .WithMany("Coaches")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Team");
                 });
@@ -269,29 +254,10 @@ namespace SoccerAPI.Database.Migrations
                     b.Navigation("Team");
                 });
 
-            modelBuilder.Entity("SoccerAPI.Database.Models.Teams.TeamCoachMapping", b =>
-                {
-                    b.HasOne("SoccerAPI.Database.Models.Teams.Coach", "Coach")
-                        .WithMany()
-                        .HasForeignKey("CoachId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SoccerAPI.Database.Models.Teams.Team", "Team")
-                        .WithMany("Coaches")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Coach");
-
-                    b.Navigation("Team");
-                });
-
             modelBuilder.Entity("SoccerAPI.Database.Models.Teams.TeamFootballerMapping", b =>
                 {
                     b.HasOne("SoccerAPI.Database.Models.Teams.Footballer", "Footballer")
-                        .WithMany()
+                        .WithMany("Teams")
                         .HasForeignKey("FootballerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -308,6 +274,11 @@ namespace SoccerAPI.Database.Migrations
                 });
 
             modelBuilder.Entity("SoccerAPI.Database.Models.Teams.Championship", b =>
+                {
+                    b.Navigation("Teams");
+                });
+
+            modelBuilder.Entity("SoccerAPI.Database.Models.Teams.Footballer", b =>
                 {
                     b.Navigation("Teams");
                 });
