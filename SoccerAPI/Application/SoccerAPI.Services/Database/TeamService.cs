@@ -8,8 +8,11 @@
 
     using AutoMapper;
 
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.EntityFrameworkCore;
 
+    using SoccerAPI.Common.Constants;
+    using SoccerAPI.Common.Constants.ModelConstants;
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Team;
@@ -18,17 +21,18 @@
 
     public class TeamService : BaseService<Team>, ITeamService
     {
-        private readonly IFootballerService footballerService;
         private readonly ITeamFootballerMappingService teamFootballerMappingService;
+        private readonly IFootballerService footballerService;
 
-        public TeamService(SoccerAPIDbContext dbContext, 
-            IMapper mapper, 
-            IFootballerService footballerService,
-            ITeamFootballerMappingService teamFootballerMappingService)
-            : base(dbContext, mapper)
+        public TeamService(SoccerAPIDbContext dbContext,
+            IMapper mapper,
+            IActionContextAccessor actionContextAccessor,
+            ITeamFootballerMappingService teamFootballerMappingService,
+            IFootballerService footballerService)
+            : base(dbContext, mapper, actionContextAccessor)
         {
-            this.footballerService = footballerService;
             this.teamFootballerMappingService = teamFootballerMappingService;
+            this.footballerService = footballerService;
         }
 
         public async Task<T> GetAllAsync<T>()
@@ -154,15 +158,34 @@
             foreach (var id in ids)
             {
                 Footballer footballerToAdd = await this.footballerService.GetByIdAsync<Footballer>(id);
+
                 if (footballerToAdd == null)
                 {
+                    this.AddModelError($"{id}", ExceptionMessages.FOOTBALLER_NOT_EXIST_ERROR_MESSAGE);
                     continue;
                 }
 
-                bool isAlreadyExist = teamToUpdate.Footballers.Any(tfm => tfm.TeamId == teamToUpdate.Id && tfm.FootballerId == id);
-                if (isAlreadyExist)
+                bool isFootballerAlreadyExist = teamToUpdate.Footballers
+                    .Any(tfm => tfm.TeamId == teamToUpdate.Id && tfm.FootballerId == id);
+
+                if (isFootballerAlreadyExist)
                 {
+                    this.AddModelError($"{footballerToAdd.Id}", ExceptionMessages.FOOTBALLER_IS_ALREADY_IN_THE_TEAM_ERROR_MESSAGE);
                     continue;
+                }
+
+                if (footballerToAdd.Teams.Count >= FootballerConstants.MAX_NUMBER_OF_TEAMS)
+                {
+                    this.AddModelError($"{footballerToAdd.Id}", ExceptionMessages.A_FOOTBALLER_CANNOT_HAVE_MORE_TEAMS_ERROR_MESSAGE);
+                    continue;
+                }
+
+                bool isThereAFreePlaceInTheTeam = teamToUpdate.Footballers.Count < TeamConstants.MAX_PLAYERS_PER_TEAM;
+                if (isThereAFreePlaceInTheTeam == false)
+                {
+                    string message = string.Format(ExceptionMessages.TEAM_PLAYERS_COUNT_ERROR_MESSAGE, TeamConstants.MAX_PLAYERS_PER_TEAM);
+                    this.AddModelError($"{teamToUpdate.Id}", message);
+                    break;
                 }
 
                 TeamFootballerMapping teamFootballerMapping = new TeamFootballerMapping();

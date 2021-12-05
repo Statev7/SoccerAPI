@@ -21,5 +21,7 @@
         public string Position { get; set; }
 
         public string StrongLeg { get; set; }
+
+        public int TeamsCount { get; set; }
     }
 }

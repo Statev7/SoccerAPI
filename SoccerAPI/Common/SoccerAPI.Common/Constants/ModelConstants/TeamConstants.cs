@@ -12,5 +12,7 @@
         public const int STADIUM_MAX_LENGHT = 128;
 
         public const int COUNTRY_MAX_LENGHT = 64;
+
+        public const int MAX_PLAYERS_PER_TEAM = 25;
     }
 }

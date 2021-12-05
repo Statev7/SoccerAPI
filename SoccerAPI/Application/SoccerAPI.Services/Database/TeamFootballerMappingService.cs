@@ -28,12 +28,12 @@
 
         public async Task<T> AddAsync<T>(TeamFootballerMapping teamFootballerMapping)
         {
-            TeamFootballerMapping footballerToAdd = this.Mapper.Map<TeamFootballerMapping>(teamFootballerMapping);
+            TeamFootballerMapping mappingModel = this.Mapper.Map<TeamFootballerMapping>(teamFootballerMapping);
 
-            await this.DbSet.AddAsync(footballerToAdd);
+            await this.DbSet.AddAsync(mappingModel);
             await this.DbContext.SaveChangesAsync();
 
-            T result = this.Mapper.Map<T>(footballerToAdd);
+            T result = this.Mapper.Map<T>(mappingModel);
             return result;
         }
 

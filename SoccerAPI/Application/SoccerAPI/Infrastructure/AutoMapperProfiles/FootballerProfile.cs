@@ -1,6 +1,7 @@
 ﻿namespace SoccerAPI.Infrastructure.AutoMapperProfiles
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using AutoMapper;
 
@@ -11,10 +12,11 @@
     {
         public FootballerProfile()
         {
-            this.CreateMap<Footballer, GetFootballerDTO>();
+            this.CreateMap<Footballer, GetFootballerDTO>()
+                .ForMember(gfdto => gfdto.TeamsCount, f => f.MapFrom(f => f.Teams.Count));
 
             this.CreateMap<IEnumerable<Footballer>, GetAllFootballersDTO>()
-                .ForMember(gaf => gaf.Footballers, f => f.MapFrom(footballer => footballer));
+                .ForMember(gafdto => gafdto.Footballers, f => f.MapFrom(footballer => footballer));
 
             this.CreateMap<PostFootballerDTO, Footballer>();
             this.CreateMap<PutFootballerDTO, Footballer>();

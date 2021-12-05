@@ -11,7 +11,7 @@
         public Footballer()
             :base()
         {
-            
+            this.Teams = new HashSet<TeamFootballerMapping>();
         }
 
         [Required]

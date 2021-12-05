@@ -25,7 +25,9 @@
 
         public async Task<T> GetAllAsync<T>()
         {
-            List<Footballer> allFootballers = await this.DbSet.ToListAsync();
+            List<Footballer> allFootballers = await this.DbSet
+                .Include(f => f.Teams)
+                .ToListAsync();
 
             T mappedFootballers = this.Mapper.Map<T>(allFootballers);
 
@@ -35,6 +37,7 @@
         public async Task<T> GetByIdAsync<T>(Guid id)
         {
             Footballer footballer = await this.DbSet
+                .Include(f => f.Teams)
                 .SingleOrDefaultAsync(f => f.Id == id);
 
             T mappedFootballer = this.Mapper.Map<T>(footballer);
@@ -114,5 +117,6 @@
 
             return true;
         }
+
     }
 }
