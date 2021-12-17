@@ -8,25 +8,25 @@
 
     using SoccerAPI.Common.Constants;
     using SoccerAPI.Database.Models.Teams;
-    using SoccerAPI.DTOs.Footballer;
+    using SoccerAPI.DTOs.Championship;
     using SoccerAPI.Services.Database.Contracts;
 
-    public class FootballerController : BaseAPIController
+    public class ChampionshipController : BaseAPIController
     {
-        private readonly IFootballerService footballerService;
+        private readonly IChampionshipService championshipService;
 
-        public FootballerController(IFootballerService footballerService)
+        public ChampionshipController(IChampionshipService championshipService)
         {
-            this.footballerService = footballerService;
+            this.championshipService = championshipService;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Get()
         {
-            GetAllFootballersDTO footballers = await this.footballerService.GetAllAsync<GetAllFootballersDTO>();
+            GetAllChampionshipsDTO championshoips = await this.championshipService.GetAllAsync<GetAllChampionshipsDTO>();
 
-            return this.Ok(footballers);
+            return this.Ok(championshoips);
         }
 
         [HttpGet]
@@ -35,33 +35,33 @@
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(Guid id)
         {
-            GetFootballerDTO footballer = await this.footballerService.GetByIdAsync<GetFootballerDTO>(id);
+            GetChampionshipDTO championship = await this.championshipService.GetByIdAsync<GetChampionshipDTO>(id);
 
-            if (footballer == null)
+            if (championship == null)
             {
                 return this.NotFound();
             }
 
-            return this.Ok(footballer);
+            return this.Ok(championship);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Post(PostFootballerDTO footballer)
+        public async Task<IActionResult> Post(PostChampionshipDTO model)
         {
-            Footballer footballerToCreate = await this.footballerService.AddAsync(footballer);
+            Championship championship = await this.championshipService.AddAsync(model);
 
-            return this.CreatedAtRoute(this.RouteData, footballerToCreate);
+            return this.CreatedAtRoute(this.RouteData, championship);
         }
 
         [HttpPut]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Put(Guid id, PutFootballerDTO footballer)
+        public async Task<IActionResult> Put(Guid id, PutChampionshipDTO model)
         {
-            bool result = await this.footballerService.UpdateAsync(id, footballer);
+            bool result = await this.championshipService.UpdateAsync(id, model);
 
             if (result == false)
             {
@@ -75,9 +75,14 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Patch(Guid id, PatchFootballerDTO footballer)
+        public async Task<IActionResult> Patch(Guid id, PatchChampionshipDTO model)
         {
-            bool result = await this.footballerService.PartialUpdateAsync(id, footballer);
+            bool result = await this.championshipService.PartialUpdateAsync(id, model);
+
+            if (result == false)
+            {
+                return this.BadRequest(ExceptionMessages.SOMETHING_WENT_WRONG_MESSAGE);
+            }
 
             return this.Ok(result);
         }
@@ -88,7 +93,7 @@
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            bool result =  await this.footballerService.DeleteAsync(id);
+            bool result = await this.championshipService.DeleteAsync(id);
 
             if (result == false)
             {
