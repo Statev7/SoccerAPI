@@ -12,7 +12,8 @@
         public TeamProfile()
         {
             this.CreateMap<PostTeamDTO, Team>();
-            this.CreateMap<Team, GetTeamDTO>();
+            this.CreateMap<Team, GetTeamDTO>()
+                .ForMember(gtd => gtd.Footballers, f => f.MapFrom(footballer => footballer.Footballers));
 
             this.CreateMap<IEnumerable<Team>, GetAllTeamsDTO>()
                 .ForMember(gat => gat.Teams, t => t.MapFrom(teams => teams));

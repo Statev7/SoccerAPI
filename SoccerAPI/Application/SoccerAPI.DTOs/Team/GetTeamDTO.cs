@@ -1,6 +1,9 @@
 ﻿namespace SoccerAPI.DTOs.Team
 {
     using System;
+    using System.Collections.Generic;
+
+    using SoccerAPI.DTOs.Footballer;
 
     public class GetTeamDTO
     {
@@ -19,6 +22,8 @@
         public DateTime? UpdatedOn { get; set; }
 
         public int FootballersCount { get; set; }
+
+        public GetAllFootballersDTO Footballers { get; set; }
 
         public int ChampionshipsCount { get; set; }
 

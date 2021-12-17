@@ -38,8 +38,9 @@
         public async Task<T> GetAllAsync<T>()
         {
             List<Team> teams = await this.DbSet
-                .Include(t => t.Championships)
                 .Include(t => t.Footballers)
+                .ThenInclude(f => f.Footballer)
+                .Include(t => t.Championships)
                 .Include(t => t.Coaches)
                 .OrderBy(t => t.Name)
                 .ToListAsync();
