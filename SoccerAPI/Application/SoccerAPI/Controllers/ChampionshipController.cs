@@ -1,12 +1,14 @@
 ﻿namespace SoccerAPI.Controllers
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     using SoccerAPI.Common.Constants;
+    using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Championship;
     using SoccerAPI.Services.Database.Contracts;
@@ -78,6 +80,12 @@
         public async Task<IActionResult> Patch(Guid id, PatchChampionshipDTO model)
         {
             bool result = await this.championshipService.PartialUpdateAsync(id, model);
+
+            if (this.ModelState.IsValid == false)
+            {
+                var expections = this.ModelState.Values.SelectMany(e => e.Errors);
+                throw new ModelException(expections);
+            }
 
             if (result == false)
             {

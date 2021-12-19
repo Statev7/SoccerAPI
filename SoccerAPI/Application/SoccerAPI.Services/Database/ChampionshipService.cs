@@ -8,8 +8,11 @@
 
     using AutoMapper;
 
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.EntityFrameworkCore;
 
+    using SoccerAPI.Common.Constants;
+    using SoccerAPI.Common.Constants.ModelConstants;
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Championship;
@@ -24,8 +27,9 @@
         public ChampionshipService(SoccerAPIDbContext dbContext, 
             IMapper mapper, 
             ITeamService teamService,
+            IActionContextAccessor actionContextAccessor,
             ITeamChampionshipMappingService teamChampionshipMapping)
-            : base(dbContext, mapper)
+            : base(dbContext, mapper, actionContextAccessor)
         {
             this.teamService = teamService;
             this.teamChampionshipMapping = teamChampionshipMapping;
@@ -136,7 +140,8 @@
             return true;
         }
 
-        private async Task AddTeamToChampionshipAsync(PatchChampionshipDTO championship, Championship championshipToUpdate, PropertyInfo property)
+        private async Task AddTeamToChampionshipAsync
+            (PatchChampionshipDTO championship, Championship championshipToUpdate, PropertyInfo property)
         {
             IEnumerable<Guid> ids = property.GetValue(championship) as IEnumerable<Guid>;
             foreach (var id in ids)
@@ -145,22 +150,31 @@
 
                 if (teamToAdd == null)
                 {
-                    //TODO throw exception!
+                    this.AddModelError(id.ToString(), ExceptionMessages.TEAM_NOT_EXIST_ERROR_MESSAGE);
+                    continue;
                 }
 
-                bool isTeamAlreadyExist = championshipToUpdate.Teams
+                bool isTheTeamAlreadyInTheLeague = championshipToUpdate.Teams
                     .Any(tcm => tcm.ChampionshipId == championshipToUpdate.Id && tcm.TeamId == id);
 
-                if (isTeamAlreadyExist)
+                if (isTheTeamAlreadyInTheLeague)
                 {
-                    //TODO throw exception!
+                    string message = 
+                        string.Format(ExceptionMessages.TEAM_IS_ALREADY_IN_THIS_CHAMPIONSHIP_ERROR_MESSAGE, 
+                        teamToAdd.Name, championshipToUpdate.Name);
+
+                    this.AddModelError(teamToAdd.Id.ToString(), message);
+                    continue;
                 }
 
-                //TODO Add constants
-                bool areThereAnyVacancies = championshipToUpdate.Teams.Count < 20;
-                if (areThereAnyVacancies == false)
+                bool areThereAnyVacanciesInTheChampionship = 
+                    championshipToUpdate.Teams.Count < ChampionshipConstants.MAX_TEAMS_PER_CHAMPIONSHIP;
+                if (areThereAnyVacanciesInTheChampionship == false)
                 {
-                    //TODO throw exception!
+                    string message = string.Format(ExceptionMessages.CANNOT_ADD_NEW_TEAM_ERROR_MESSAGE, championshipToUpdate.Name);
+
+                    this.AddModelError(championshipToUpdate.Id.ToString(), message);
+                    continue;
                 }
 
                 TeamChampionshipMapping teamChampionshipMapping = new TeamChampionshipMapping();

@@ -21,8 +21,6 @@
 
         public DateTime? UpdatedOn { get; set; }
 
-        public int FootballersCount { get; set; }
-
         public GetAllFootballersDTO Footballers { get; set; }
 
         public int ChampionshipsCount { get; set; }
