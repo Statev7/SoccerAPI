@@ -39,8 +39,9 @@
         {
             List<Team> teams = await this.DbSet
                 .Include(t => t.Footballers)
-                .ThenInclude(f => f.Footballer)
+                .ThenInclude(t => t.Footballer)
                 .Include(t => t.Championships)
+                .ThenInclude(t => t.Championship)
                 .Include(t => t.Coaches)
                 .OrderBy(t => t.Name)
                 .ToListAsync();

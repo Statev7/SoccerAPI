@@ -18,6 +18,15 @@
 
             this.CreateMap<IEnumerable<Championship>, GetAllChampionshipsDTO>()
                 .ForMember(gac => gac.Championships, t => t.MapFrom(championships => championships));
+
+            this.CreateMap<IEnumerable<TeamChampionshipMapping>, GetAllChampionshipsDTO>()
+                .ForMember(gafdto => gafdto.Championships, c => c.MapFrom(championship => championship));
+
+            this.CreateMap<TeamChampionshipMapping, GetChampionshipDTO>()
+                .ForMember(gcdto => gcdto.Id, c => c.MapFrom(tcm => tcm.Championship.Id))
+                .ForMember(gcdto => gcdto.Name, c => c.MapFrom(tcm => tcm.Championship.Name))
+                .ForMember(gcdto => gcdto.TeamsCount, c => c.MapFrom(tcm => tcm.Championship.Teams.Count));
+            
         }
     }
 }
