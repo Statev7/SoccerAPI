@@ -81,7 +81,6 @@
         /// <response code="400">If the body is not correct</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post(PostTeamDTO team)
         {
             Team createdTeam = await this.teamService.AddAsync(team);

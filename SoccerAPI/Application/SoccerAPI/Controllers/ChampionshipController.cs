@@ -49,7 +49,6 @@
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post(PostChampionshipDTO model)
         {
             Championship championship = await this.championshipService.AddAsync(model);
