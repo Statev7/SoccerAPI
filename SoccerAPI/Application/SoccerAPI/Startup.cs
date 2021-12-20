@@ -66,7 +66,8 @@ namespace SoccerAPI
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SoccerAPI v1"));
             }
 
-            app.UseMiddleware<ExceptionMiddleware>();
+            //TODO uncomment 
+            //app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 
@@ -87,6 +88,7 @@ namespace SoccerAPI
             services.AddScoped<ITeamFootballerMappingService, TeamFootballerMappingService>();
             services.AddScoped<IChampionshipService, ChampionshipService>();
             services.AddScoped<ITeamChampionshipMappingService, TeamChampionshipMappingService>();
+            services.AddScoped<ICoachService, CoachService>();
         }
     }
 }
