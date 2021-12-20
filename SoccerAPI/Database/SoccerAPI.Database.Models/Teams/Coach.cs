@@ -14,7 +14,7 @@
 
         public string CoachType { get; set; }
 
-        public Guid TeamId { get; set; }
+        public Guid? TeamId { get; set; }
 
         public virtual Team Team { get; set; }
     }
