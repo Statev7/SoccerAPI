@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -9,6 +10,8 @@
     using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.EntityFrameworkCore;
 
+    using SoccerAPI.Common.Constants;
+    using SoccerAPI.Services.Validator;
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Coach;
@@ -17,11 +20,12 @@
     public class CoachService : BaseService<Coach>, ICoachService
     {
         public CoachService(
-            SoccerAPIDbContext dbContext, 
-            IMapper mapper, 
-            IActionContextAccessor actionContextAccessor) 
+            SoccerAPIDbContext dbContext,
+            IMapper mapper,
+            IActionContextAccessor actionContextAccessor)
             : base(dbContext, mapper, actionContextAccessor)
         {
+
         }
 
         public async Task<T> GetAllAsync<T>()
@@ -74,9 +78,34 @@
             return true;
         }
 
-        public Task<bool> PartialUpdateAsync(Guid id, PatchCoachDTO model)
+        public async Task<bool> PartialUpdateAsync(Guid id, PatchCoachDTO model)
         {
-            throw new NotImplementedException();
+            Coach coachToUpdate = await this.GetByIdAsync<Coach>(id);
+
+            if (coachToUpdate == null)
+            {
+                return false;
+            }
+
+            PropertyInfo[] properties = model.GetType().GetProperties();
+            foreach (var property in properties)
+            {
+                var propertyValue = property.GetValue(model);
+
+                bool isNullOrDefault = Validator.IsNullOrDefault<object>(propertyValue);
+                if (isNullOrDefault == false)
+                {
+                    PropertyInfo propertyToUpdate = coachToUpdate.GetType().GetProperty(property.Name);
+                    propertyToUpdate.SetValue(coachToUpdate, propertyValue);
+                }
+            }
+
+            coachToUpdate.UpdatedOn = DateTime.UtcNow;
+
+            this.DbContext.Update(coachToUpdate);
+            await this.DbContext.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> DeleteAsync(Guid id)

@@ -77,6 +77,22 @@
             return this.Ok(result);
         }
 
+        [HttpPatch]
+        [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Patch(Guid id, PatchCoachDTO model)
+        {
+            bool result = await this.service.PartialUpdateAsync(id, model);
+
+            if (result == false)
+            {
+                return this.BadRequest(ExceptionMessages.SOMETHING_WENT_WRONG_MESSAGE);
+            }
+
+            return this.Ok(result);
+        }
+
         [HttpDelete]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
