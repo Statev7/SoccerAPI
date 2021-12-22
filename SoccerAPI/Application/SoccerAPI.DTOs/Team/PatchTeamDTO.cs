@@ -24,5 +24,7 @@
         public string Country { get; set; }
 
         public IEnumerable<Guid> FootballersId { get; set; }
+
+        public IEnumerable<Guid> CoachesId { get; set; }
     }
 }

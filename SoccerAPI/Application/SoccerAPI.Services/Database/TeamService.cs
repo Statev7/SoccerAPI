@@ -23,16 +23,19 @@
     {
         private readonly ITeamFootballerMappingService teamFootballerMappingService;
         private readonly IFootballerService footballerService;
+        private readonly ICoachService coachService;
 
         public TeamService(SoccerAPIDbContext dbContext,
             IMapper mapper,
             IActionContextAccessor actionContextAccessor,
             ITeamFootballerMappingService teamFootballerMappingService,
-            IFootballerService footballerService)
+            IFootballerService footballerService,
+            ICoachService coachService)
             : base(dbContext, mapper, actionContextAccessor)
         {
             this.teamFootballerMappingService = teamFootballerMappingService;
             this.footballerService = footballerService;
+            this.coachService = coachService;
         }
 
         public async Task<T> GetAllAsync<T>()
@@ -116,13 +119,17 @@
 
                     if (isIEnumerable)
                     {
+                        IEnumerable<Guid> ids = property.GetValue(team) as IEnumerable<Guid>;
+
                         switch (property.Name)
                         {
                             case "FootballersId":
-                                await this.AddFootballersToTeamAsync(team, teamToUpdate, property);
+                                await this.AddFootballersToTeamAsync(teamToUpdate, ids);
+                                break;
+                            case "CoachesId":
+                                await this.AddCoachesToTeamAsync(teamToUpdate, ids);
                                 break;
                         }
-
                         continue;
                     }
 
@@ -154,9 +161,8 @@
             return true;
         }
 
-        private async Task AddFootballersToTeamAsync(PatchTeamDTO team, Team teamToUpdate, PropertyInfo property)
+        private async Task AddFootballersToTeamAsync(Team teamToUpdate, IEnumerable<Guid> ids)
         {
-            IEnumerable<Guid> ids = property.GetValue(team) as IEnumerable<Guid>;
             foreach (var id in ids)
             {
                 Footballer footballerToAdd = await this.footballerService.GetByIdAsync<Footballer>(id);
@@ -167,18 +173,24 @@
                     continue;
                 }
 
-                bool isFootballerAlreadyExist = teamToUpdate.Footballers
+                bool isHeAFootballerOnThisTeam = teamToUpdate.Footballers
                     .Any(tfm => tfm.TeamId == teamToUpdate.Id && tfm.FootballerId == id);
 
-                if (isFootballerAlreadyExist)
+                if (isHeAFootballerOnThisTeam)
                 {
-                    this.AddModelError($"{footballerToAdd.Id}", ExceptionMessages.FOOTBALLER_IS_ALREADY_IN_THE_TEAM_ERROR_MESSAGE);
+                    string message = 
+                        string.Format(ExceptionMessages.FOOTBALLER_IS_ALREADY_IN_THE_TEAM_ERROR_MESSAGE, footballerToAdd.FullName);
+
+                    this.AddModelError(id.ToString(), message);
                     continue;
                 }
 
                 if (footballerToAdd.Teams.Count >= FootballerConstants.MAX_NUMBER_OF_TEAMS)
                 {
-                    this.AddModelError($"{footballerToAdd.Id}", ExceptionMessages.A_FOOTBALLER_CANNOT_HAVE_MORE_TEAMS_ERROR_MESSAGE);
+                    string message = 
+                        string.Format(ExceptionMessages.A_FOOTBALLER_CANNOT_HAVE_MORE_TEAMS_ERROR_MESSAGE, footballerToAdd.FullName);
+
+                    this.AddModelError(id.ToString(), message);
                     continue;
                 }
 
@@ -195,6 +207,58 @@
                 teamFootballerMapping.TeamId = teamToUpdate.Id;
 
                 await this.teamFootballerMappingService.AddAsync<TeamFootballerMapping>(teamFootballerMapping);
+            }
+        }
+
+        private async Task AddCoachesToTeamAsync(Team teamToUpdate, IEnumerable<Guid> ids)
+        {
+            foreach (var id in ids)
+            {
+                Coach coachToAdd = await this.coachService.GetByIdAsync<Coach>(id);
+
+                if (coachToAdd == null)
+                {
+                    this.AddModelError(id.ToString(), ExceptionMessages.COACH_NOT_EXIST_ERROR_MESSAGE);
+                    continue;
+                }
+
+                bool isHeAlreadyTheCoachOfThisTeam = teamToUpdate.Coaches
+                    .Any(c => c.Id == id && c.TeamId == teamToUpdate.Id);
+
+                if (isHeAlreadyTheCoachOfThisTeam)
+                {
+                    string message = 
+                        string.Format(ExceptionMessages.THE_COACH_IS_ALREADY_IN_THE_TEAM, coachToAdd.FullName);
+
+                    this.AddModelError(id.ToString(), message);
+                    continue;
+                }
+
+                bool isTheCoachAlreadyTheCoachOfAnotherTeam = coachToAdd.Team != null;
+                if (isTheCoachAlreadyTheCoachOfAnotherTeam)
+                {
+                    string message =
+                        string.Format(ExceptionMessages.THE_COACH_IS_ALREADY_THE_COACH_OF_ANOTHER_TEAM, coachToAdd.FullName);
+
+                    this.AddModelError(id.ToString(), message);
+                    continue;
+                }
+
+                bool areThereAnyVacanciesInTheTeamForANewCoach = teamToUpdate.Coaches.Count < TeamConstants.MAX_COACHES_PER_TEAM;
+                if (areThereAnyVacanciesInTheTeamForANewCoach == false)
+                {
+                    string message =
+                        string.Format(ExceptionMessages.CANNOT_ADD_NEW_COACH_TO_TEAM_ERROR_MESSAGE, teamToUpdate.Name);
+
+                    this.AddModelError(teamToUpdate.Id.ToString(), message);
+                    break;
+                }
+
+                teamToUpdate.Coaches.Add(coachToAdd);
+                coachToAdd.TeamId = teamToUpdate.Id;
+
+                this.DbSet.Update(teamToUpdate);
+                await this.DbContext.SaveChangesAsync();
             }
         }
     }

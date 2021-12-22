@@ -14,5 +14,7 @@
         public const int COUNTRY_MAX_LENGHT = 64;
 
         public const int MAX_PLAYERS_PER_TEAM = 25;
+
+        public const int MAX_COACHES_PER_TEAM = 10;
     }
 }
