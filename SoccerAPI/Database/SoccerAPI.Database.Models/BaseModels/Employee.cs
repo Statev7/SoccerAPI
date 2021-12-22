@@ -17,6 +17,8 @@
         [MaxLength(EmployeeConstants.SECOND_NAME_MAX_LENGHT)]
         public string SecondName { get; set; }
 
+        public string FullName => this.FirstName + " " + this.SecondName;
+
         [Required]
         [MinLength(EmployeeConstants.NATIONALITY_MIN_LENGHT)]
         [MaxLength(EmployeeConstants.NATIONALITY_MAX_LENGHT)]
