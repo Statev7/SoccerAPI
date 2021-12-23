@@ -23,6 +23,20 @@
         }
 
         /// <summary>
+        /// Get all teams
+        /// </summary>
+        /// <returns>Returns all teams sorted by name</returns>
+        /// <response code="200">Returns all teams</response>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Get()
+        {
+            GetAllTeamsDTO teams = await this.teamService.GetAllAsync<GetAllTeamsDTO>();
+
+            return this.Ok(teams);
+        }
+
+        /// <summary>
         ///  Get team by id
         /// </summary>
         /// <param name="id"></param>
@@ -44,20 +58,6 @@
             }
 
             return this.Ok(team);
-        }
-
-        /// <summary>
-        /// Get all teams
-        /// </summary>
-        /// <returns>Returns all teame</returns>
-        /// <response code="200">Returns all teams</response>
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get()
-        {
-            GetAllTeamsDTO teams = await this.teamService.GetAllAsync<GetAllTeamsDTO>();
-
-            return this.Ok(teams);
         }
 
         /// <summary>
@@ -138,6 +138,9 @@
         ///        "country": "TeamCountry"
         ///        "footballersId: [
         ///             "FootballerId"
+        ///        ],
+        ///        "coachesId: [
+        ///             "CoachId"
         ///        ]
         ///     }
         ///

@@ -22,6 +22,11 @@
             this.championshipService = championshipService;
         }
 
+        /// <summary>
+        /// Get all championships
+        /// </summary>
+        /// <returns>Returns all championships</returns>
+        /// <response code="200">Returns all championships</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Get()
@@ -31,6 +36,14 @@
             return this.Ok(championshoips);
         }
 
+        /// <summary>
+        ///  Get championship by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <returns>Returns the championship entity by the given id</returns>
+        /// <response code="200">Returns the championship entity by the given id</response>
+        /// <response code="404">If the championship is null</response>
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -47,6 +60,22 @@
             return this.Ok(championship);
         }
 
+        /// <summary>
+        /// Create championship
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /api/Championship
+        ///     {
+        ///        "name": "ChampionshipName"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="model">Body model with data</param>
+        /// <returns>The championship that is created</returns>
+        /// <response code="200">If the championship is created successfully</response>
+        /// <response code="400">If the body is not correct</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Post(PostChampionshipDTO model)
@@ -56,6 +85,23 @@
             return this.CreatedAtRoute(this.RouteData, championship);
         }
 
+        /// <summary>
+        /// Update championship
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     Put /api/Championship
+        ///     {
+        ///        "name": "ChampionshipName"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="id">The championship id</param>
+        /// <param name="model">Body model with data to update</param>
+        /// <returns>The result from the update action</returns>
+        /// <response code="200">If the championship is updated successfully</response>
+        /// <response code="400">If the championship is not correct</response>
         [HttpPut]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -72,6 +118,26 @@
             return this.Ok(result);
         }
 
+        /// <summary>
+        /// Partial update championship
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PATCH /api/Championship
+        ///     {
+        ///        "name": "ChampionshipName"
+        ///        "teamsId: [
+        ///             "TeamId"
+        ///        ]
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="id">The championship id</param>
+        /// <param name="model">Body model with data to partial update</param>
+        /// <returns>The result from the update action</returns>
+        /// <response code="200">If the championship is updated successfully</response>
+        /// <response code="400">If the championship is not correct</response>
         [HttpPatch]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -94,6 +160,13 @@
             return this.Ok(result);
         }
 
+        /// <summary>
+        /// Delete championship by Id
+        /// </summary>
+        /// <param name="id">The championship id</param>
+        /// <returns>The result from the delete action</returns>
+        /// <response code="200">If the championship is deleted successfully</response>
+        /// <response code="400">If the championship is null</response>
         [HttpDelete]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
