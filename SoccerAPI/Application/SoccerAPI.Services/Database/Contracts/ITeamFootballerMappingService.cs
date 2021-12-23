@@ -7,12 +7,11 @@
 
     public interface ITeamFootballerMappingService
     {
-        Task<T> GetAllAsync<T>();
 
-        Task<T> GetByIdAsync<T>(Guid id);
+        Task<T> GetByTeamAndFootballerIdAsync<T>(Guid teamId, Guid footbollerId);
 
         Task<T> AddAsync<T>(TeamFootballerMapping teamFootballerMapping);
 
-        Task<bool> DeleteAsync(Guid id);
+        Task<bool> DeleteAsync(Guid teamId, Guid footballerId);
     }
 }

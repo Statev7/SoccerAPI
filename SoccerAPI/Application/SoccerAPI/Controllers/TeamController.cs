@@ -16,10 +16,17 @@
     public class TeamController : BaseAPIController
     {
         private readonly ITeamService teamService;
+        private readonly ITeamFootballerMappingService teamFootballerMappingService;
+        private readonly ITeamCoachService teamCoachService;
 
-        public TeamController(ITeamService teamService)
+        public TeamController(
+            ITeamService teamService, 
+            ITeamFootballerMappingService teamFootballerMappingService,
+            ITeamCoachService teamCoachService)
         {
             this.teamService = teamService;
+            this.teamFootballerMappingService = teamFootballerMappingService;
+            this.teamCoachService = teamCoachService;
         }
 
         /// <summary>
@@ -191,6 +198,41 @@
             {
                 return this.BadRequest(ExceptionMessages.SOMETHING_WENT_WRONG_MESSAGE);
             }
+
+            return this.Ok(result);
+        }
+
+        /// <summary>
+		/// Delete footballer from team
+		/// </summary>
+		/// <param name="teamId">The team id</param>
+		/// <param name="footballerId">The footballer id</param>
+		/// <returns>The result from the delete action</returns>
+		/// <response code="200">If the relation is deleted successfully</response>
+		/// <response code="400">If there is no relation</response>
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Delete(Guid teamId, Guid footballerId)
+        {
+            bool result = await this.teamFootballerMappingService.DeleteAsync(teamId, footballerId);
+
+            return this.Ok(result);
+        }
+
+        /// <summary>
+		/// Delete coach from team
+		/// </summary>
+		/// <param name="teamId">The team id</param>
+		/// <param name="coachId">The coach id</param>
+		/// <returns>The result from the delete action</returns>
+		/// <response code="200">If the relation is deleted successfully</response>
+		/// <response code="400">If there is no relation</response>
+        [HttpDelete]
+        [Route("[action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteCoach(Guid teamId, Guid coachId)
+        {
+            bool result = await this.teamCoachService.DeleteAsync(teamId, coachId);
 
             return this.Ok(result);
         }

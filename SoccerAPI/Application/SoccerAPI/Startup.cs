@@ -88,6 +88,7 @@ namespace SoccerAPI
             services.AddScoped<IChampionshipService, ChampionshipService>();
             services.AddScoped<ITeamChampionshipMappingService, TeamChampionshipMappingService>();
             services.AddScoped<ICoachService, CoachService>();
+            services.AddScoped<ITeamCoachService, TeamCoachService>();
         }
     }
 }

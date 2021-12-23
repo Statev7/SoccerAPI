@@ -1,10 +1,14 @@
 ﻿namespace SoccerAPI.Services.Database
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
 
+    using Microsoft.EntityFrameworkCore;
+
+    using SoccerAPI.Common.Constants;
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.Services.Database.Contracts;
@@ -14,16 +18,25 @@
         public TeamFootballerMappingService(SoccerAPIDbContext dbContext, IMapper mapper) 
             : base(dbContext, mapper)
         {
+
         }
 
-        public Task<T> GetAllAsync<T>()
+        public async Task<T> GetByTeamAndFootballerIdAsync<T>(Guid teamId, Guid footbollerId)
         {
-            throw new NotImplementedException();
-        }
+            var teamFootboolerReletion = await this.DbSet
+                .Where(tfm => tfm.TeamId == teamId && tfm.FootballerId == footbollerId)
+                .Include(tfm => tfm.Team)
+                .Include(tfm => tfm.Footballer)
+                .SingleOrDefaultAsync();
 
-        public Task<T> GetByIdAsync<T>(Guid id)
-        {
-            throw new NotImplementedException();
+            if (teamFootboolerReletion == null)
+            {
+                //TODO catch exception!
+                throw new ArgumentException(ExceptionMessages.TEAM_FOOTBOOLER_MAPPING_DOES_NOT_EXIST_ERROR_MESSAGE);
+            }
+
+            var mapped = this.Mapper.Map<T>(teamFootboolerReletion);
+            return mapped;
         }
 
         public async Task<T> AddAsync<T>(TeamFootballerMapping teamFootballerMapping)
@@ -37,9 +50,15 @@
             return result;
         }
 
-        public Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(Guid teamId, Guid footballerId)
         {
-            throw new NotImplementedException();
+            var teamFootboolerReletionToDelete = 
+                await this.GetByTeamAndFootballerIdAsync<TeamFootballerMapping>(teamId, footballerId);
+
+            this.DbSet.Remove(teamFootboolerReletionToDelete);
+            await this.DbContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }

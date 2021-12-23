@@ -16,10 +16,14 @@
     public class ChampionshipController : BaseAPIController
     {
         private readonly IChampionshipService championshipService;
+        private readonly ITeamChampionshipMappingService teamChampionshipMappingService;
 
-        public ChampionshipController(IChampionshipService championshipService)
+        public ChampionshipController(
+            IChampionshipService championshipService, 
+            ITeamChampionshipMappingService teamChampionshipMappingService)
         {
             this.championshipService = championshipService;
+            this.teamChampionshipMappingService = teamChampionshipMappingService;
         }
 
         /// <summary>
@@ -179,6 +183,22 @@
             {
                 return this.BadRequest(ExceptionMessages.SOMETHING_WENT_WRONG_MESSAGE);
             }
+
+            return this.Ok(result);
+        }
+
+        /// <summary>
+		/// Delete team from championship
+		/// </summary>
+		/// <param name="championshipId">The championship id</param>
+		/// <param name="teamId">The team id</param>
+		/// <returns>The result from the delete action</returns>
+		/// <response code="200">If the relation is deleted successfully</response>
+		/// <response code="400">If there is no relation</response>
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid championshipId, Guid teamId)
+        {
+            bool result = await this.teamChampionshipMappingService.DeleteAsync(championshipId, teamId);
 
             return this.Ok(result);
         }

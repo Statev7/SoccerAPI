@@ -25,5 +25,7 @@
         public const string THE_COACH_IS_ALREADY_THE_COACH_OF_ANOTHER_TEAM = "{0} is the coach of another team";
 
         public const string CANNOT_ADD_NEW_COACH_TO_TEAM_ERROR_MESSAGE = "The {0} has reached the maximum number of coaches!";
+
+        public const string TEAM_FOOTBOOLER_MAPPING_DOES_NOT_EXIST_ERROR_MESSAGE = "There is no relation between this team and footballer!";
     }
 }
