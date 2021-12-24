@@ -13,6 +13,7 @@
 
     using SoccerAPI.Common.Constants;
     using SoccerAPI.Common.Constants.ModelConstants;
+    using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Championship;
@@ -52,6 +53,11 @@
                 .Include(f => f.Teams)
                 .SingleOrDefaultAsync(f => f.Id == id);
 
+            if (championship == null)
+            {
+                throw new EntityDoesNotExistException(ExceptionMessages.CHAMPIONSHIP_DOES_NOT_EXIST_ERROR_MESSAGE);
+            }
+
             T mappedChampionship = this.Mapper.Map<T>(championship);
 
             return mappedChampionship;
@@ -73,7 +79,7 @@
 
             if (championshipToUpdate == null)
             {
-                return false;
+                throw new EntityDoesNotExistException(ExceptionMessages.CHAMPIONSHIP_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             Championship mappedChampinship = this.Mapper.Map(championship, championshipToUpdate);
@@ -91,7 +97,7 @@
 
             if (championshipToUpdate == null)
             {
-                return false;
+                throw new EntityDoesNotExistException(ExceptionMessages.CHAMPIONSHIP_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             PropertyInfo[] properties = championship.GetType().GetProperties();
@@ -131,7 +137,7 @@
 
             if (championshipToDelete == null)
             {
-                return false;
+                throw new EntityDoesNotExistException(ExceptionMessages.CHAMPIONSHIP_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             this.DbSet.Remove(championshipToDelete);
@@ -150,7 +156,7 @@
 
                 if (teamToAdd == null)
                 {
-                    this.AddModelError(id.ToString(), ExceptionMessages.TEAM_NOT_EXIST_ERROR_MESSAGE);
+                    this.AddModelError(id.ToString(), ExceptionMessages.TEAM_DOES_NOT_EXIST_ERROR_MESSAGE);
                     continue;
                 }
 

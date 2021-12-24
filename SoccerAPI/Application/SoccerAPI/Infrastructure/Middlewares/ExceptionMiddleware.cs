@@ -36,10 +36,7 @@
 			context.Response.ContentType = "application/json";
 			context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-			ErrorDetails errorDetails = new ErrorDetails()
-			{
-				StatusCode = context.Response.StatusCode
-			};
+			ErrorDetails errorDetails = new ErrorDetails();
 
             switch (exception)
             {
@@ -47,7 +44,13 @@
 					ModelException modelException = exception as ModelException;
 					errorDetails.Message = modelException.ErrorsMessage.Select(e => e.ErrorMessage);
                     break;
+				case EntityDoesNotExistException:
+					context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+					errorDetails.Message = exception.Message;
+					break;
             }
+
+			errorDetails.StatusCode = context.Response.StatusCode;
 
 			await context.Response.WriteAsync(errorDetails.ToString());
 		}

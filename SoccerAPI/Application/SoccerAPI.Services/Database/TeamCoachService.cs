@@ -6,6 +6,8 @@
 
     using AutoMapper;
 
+    using SoccerAPI.Common.Constants;
+    using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.Services.Database.Contracts;
@@ -32,7 +34,7 @@
 
             if (result == false)
             {
-                //TODO throw exception
+                throw new EntityDoesNotExistException(ExceptionMessages.TEAM_COACH_MAPPING_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             Team team = await this.teamService.GetByIdAsync<Team>(teamId);
@@ -55,12 +57,12 @@
 
             if (team == null)
             {
-                //TODO throw exception
+                throw new EntityDoesNotExistException(ExceptionMessages.TEAM_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             if (coach == null)
             {
-                //TODO throw exception
+                throw new EntityDoesNotExistException(ExceptionMessages.COACH_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             bool isValid = team.Coaches.Any(c => c.Id == coachId) && coach.TeamId == teamId;

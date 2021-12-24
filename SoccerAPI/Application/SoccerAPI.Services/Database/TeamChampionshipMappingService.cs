@@ -8,6 +8,8 @@
 
     using Microsoft.EntityFrameworkCore;
 
+    using SoccerAPI.Common.Constants;
+    using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.Services.Database.Contracts;
@@ -30,7 +32,7 @@
 
             if (championshipTeamReletion == null)
             {
-                //TODO throw exception
+                throw new EntityDoesNotExistException(ExceptionMessages.CHAMPIONSHIP_TEAM_MAPPING_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             T mapped = this.Mapper.Map<T>(championshipTeamReletion);

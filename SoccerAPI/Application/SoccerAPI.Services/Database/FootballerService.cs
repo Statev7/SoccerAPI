@@ -14,6 +14,8 @@
     using SoccerAPI.DTOs.Footballer;
     using SoccerAPI.Services.Validator;
     using SoccerAPI.Services.Database.Contracts;
+    using SoccerAPI.Common.Exeptions;
+    using SoccerAPI.Common.Constants;
 
     public class FootballerService : BaseService<Footballer>, IFootballerService
     {
@@ -40,6 +42,11 @@
                 .Include(f => f.Teams)
                 .SingleOrDefaultAsync(f => f.Id == id);
 
+            if (footballer == null)
+            {
+                throw new EntityDoesNotExistException(ExceptionMessages.FOOTBALLER_DOES_NOT_EXIST_ERROR_MESSAGE);
+            }
+
             T mappedFootballer = this.Mapper.Map<T>(footballer);
 
             return mappedFootballer;
@@ -61,7 +68,7 @@
 
             if (footballerToUpdate == null)
             {
-                return false;
+                throw new EntityDoesNotExistException(ExceptionMessages.FOOTBALLER_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             Footballer updatedFootballer = this.Mapper.Map(footballer, footballerToUpdate);
@@ -79,7 +86,7 @@
 
             if (footballerToUpdate == null)
             {
-                return false;
+                throw new EntityDoesNotExistException(ExceptionMessages.FOOTBALLER_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             PropertyInfo[] properties = footballer.GetType().GetProperties();
@@ -109,7 +116,7 @@
 
             if (footballerToDelete == null)
             {
-                return false;
+                throw new EntityDoesNotExistException(ExceptionMessages.FOOTBALLER_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             this.DbSet.Remove(footballerToDelete);
@@ -117,6 +124,5 @@
 
             return true;
         }
-
     }
 }

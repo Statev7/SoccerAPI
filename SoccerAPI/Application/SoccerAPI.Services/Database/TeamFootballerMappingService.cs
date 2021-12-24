@@ -9,6 +9,7 @@
     using Microsoft.EntityFrameworkCore;
 
     using SoccerAPI.Common.Constants;
+    using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.Services.Database.Contracts;
@@ -31,8 +32,7 @@
 
             if (teamFootboolerReletion == null)
             {
-                //TODO catch exception!
-                throw new ArgumentException(ExceptionMessages.TEAM_FOOTBOOLER_MAPPING_DOES_NOT_EXIST_ERROR_MESSAGE);
+                throw new EntityDoesNotExistException(ExceptionMessages.TEAM_FOOTBOOLER_MAPPING_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             var mapped = this.Mapper.Map<T>(teamFootboolerReletion);

@@ -13,6 +13,7 @@
 
     using SoccerAPI.Common.Constants;
     using SoccerAPI.Common.Constants.ModelConstants;
+    using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Team;
@@ -62,6 +63,11 @@
                 .Include(t => t.Coaches)
                 .SingleOrDefaultAsync(t => t.Id == id);
 
+            if (team == null)
+            {
+                throw new EntityDoesNotExistException(ExceptionMessages.TEAM_DOES_NOT_EXIST_ERROR_MESSAGE);
+            }
+
             T mappedTeam = this.Mapper.Map<T>(team);
 
             return mappedTeam;
@@ -83,7 +89,7 @@
 
             if (teamToUpdate == null)
             {
-                return false;
+                throw new EntityDoesNotExistException(ExceptionMessages.TEAM_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             Team updatedTeam = this.Mapper.Map(team, teamToUpdate);
@@ -102,7 +108,7 @@
 
             if (teamToUpdate == null)
             {
-                return false;
+                throw new EntityDoesNotExistException(ExceptionMessages.TEAM_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             PropertyInfo[] properties = team.GetType().GetProperties();
@@ -152,7 +158,7 @@
 
             if (teamToDelete == null)
             {
-                return false;
+                throw new EntityDoesNotExistException(ExceptionMessages.TEAM_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             this.DbSet.Remove(teamToDelete);
@@ -169,7 +175,7 @@
 
                 if (footballerToAdd == null)
                 {
-                    this.AddModelError($"{id}", ExceptionMessages.FOOTBALLER_NOT_EXIST_ERROR_MESSAGE);
+                    this.AddModelError($"{id}", ExceptionMessages.FOOTBALLER_DOES_NOT_EXIST_ERROR_MESSAGE);
                     continue;
                 }
 
@@ -218,7 +224,7 @@
 
                 if (coachToAdd == null)
                 {
-                    this.AddModelError(id.ToString(), ExceptionMessages.COACH_NOT_EXIST_ERROR_MESSAGE);
+                    this.AddModelError(id.ToString(), ExceptionMessages.COACH_DOES_NOT_EXIST_ERROR_MESSAGE);
                     continue;
                 }
 

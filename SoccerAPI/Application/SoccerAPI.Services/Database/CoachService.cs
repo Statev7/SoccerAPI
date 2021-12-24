@@ -16,6 +16,7 @@
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Coach;
     using SoccerAPI.Services.Database.Contracts;
+    using SoccerAPI.Common.Exeptions;
 
     public class CoachService : BaseService<Coach>, ICoachService
     {
@@ -45,6 +46,11 @@
                 .Include(c => c.Team)
                 .SingleOrDefaultAsync(c => c.Id == id);
 
+            if (coach == null)
+            {
+                throw new EntityDoesNotExistException(ExceptionMessages.COACH_DOES_NOT_EXIST_ERROR_MESSAGE);
+            }
+
             T mappedCoach = this.Mapper.Map<T>(coach);
 
             return mappedCoach;
@@ -66,7 +72,7 @@
 
             if (coachToUpdate == null)
             {
-                return false;
+                throw new EntityDoesNotExistException(ExceptionMessages.COACH_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             Coach mappedCoach = this.Mapper.Map(model, coachToUpdate);
@@ -84,7 +90,7 @@
 
             if (coachToUpdate == null)
             {
-                return false;
+                throw new EntityDoesNotExistException(ExceptionMessages.COACH_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             PropertyInfo[] properties = model.GetType().GetProperties();
@@ -114,7 +120,7 @@
 
             if (coachToDelete == null)
             {
-                return false;
+                throw new EntityDoesNotExistException(ExceptionMessages.COACH_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             this.DbSet.Remove(coachToDelete);
