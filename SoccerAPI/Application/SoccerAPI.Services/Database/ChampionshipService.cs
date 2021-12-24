@@ -53,11 +53,6 @@
                 .Include(f => f.Teams)
                 .SingleOrDefaultAsync(f => f.Id == id);
 
-            if (championship == null)
-            {
-                throw new EntityDoesNotExistException(ExceptionMessages.CHAMPIONSHIP_DOES_NOT_EXIST_ERROR_MESSAGE);
-            }
-
             T mappedChampionship = this.Mapper.Map<T>(championship);
 
             return mappedChampionship;

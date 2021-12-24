@@ -17,6 +17,7 @@
     using SoccerAPI.DTOs.Coach;
     using SoccerAPI.Services.Database.Contracts;
     using SoccerAPI.Common.Exeptions;
+    using SoccerAPI.Common.Constants.ModelConstants;
 
     public class CoachService : BaseService<Coach>, ICoachService
     {
@@ -46,11 +47,6 @@
                 .Include(c => c.Team)
                 .SingleOrDefaultAsync(c => c.Id == id);
 
-            if (coach == null)
-            {
-                throw new EntityDoesNotExistException(ExceptionMessages.COACH_DOES_NOT_EXIST_ERROR_MESSAGE);
-            }
-
             T mappedCoach = this.Mapper.Map<T>(coach);
 
             return mappedCoach;
@@ -59,6 +55,19 @@
         public async Task<Coach> AddAsync(PostCoachDTO model)
         {
             Coach coach = this.Mapper.Map<Coach>(model);
+
+            bool isValid = Validator.IsDateValid(model.DateOfBirth);
+            if (isValid == false)
+            {
+                throw new InvalidPropertyDateException(ExceptionMessages.INVALID_DATE_OF_BIRTH_ERROR_MESSAGE);
+            }
+
+            if (coach.Age < CoachConstants.MIN_AGE)
+            {
+                string message = string.Format(ExceptionMessages.COACH_INVALID_AGE_ERROR_MESSAGE, CoachConstants.MIN_AGE);
+
+                throw new InvalidPropertyDateException(message);
+            }
 
             await this.DbSet.AddAsync(coach);
             await this.DbContext.SaveChangesAsync();

@@ -37,8 +37,9 @@
 			context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
 			ErrorDetails errorDetails = new ErrorDetails();
+			errorDetails.Message = exception.Message;
 
-            switch (exception)
+			switch (exception)
             {
 				case ModelException:
 					ModelException modelException = exception as ModelException;
@@ -46,9 +47,11 @@
                     break;
 				case EntityDoesNotExistException:
 					context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-					errorDetails.Message = exception.Message;
 					break;
-            }
+				case InvalidPropertyDateException:
+					context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+					break;
+			}
 
 			errorDetails.StatusCode = context.Response.StatusCode;
 

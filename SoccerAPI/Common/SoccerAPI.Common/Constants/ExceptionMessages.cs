@@ -33,5 +33,11 @@
         public const string TEAM_COACH_MAPPING_DOES_NOT_EXIST_ERROR_MESSAGE = "There is no relation between this team and coach!";
 
         public const string CHAMPIONSHIP_TEAM_MAPPING_DOES_NOT_EXIST_ERROR_MESSAGE = "There is no relation between this champinship and team!";
+
+        public const string FOOTBALLER_INVALID_AGE_ERROR_MESSAGE = "The footballer cannot be younger than {0} years old";
+
+        public const string COACH_INVALID_AGE_ERROR_MESSAGE = "The coach cannot be younger than {0} years old";
+
+        public const string INVALID_DATE_OF_BIRTH_ERROR_MESSAGE = "Invalid date of birth!";
     }
 }

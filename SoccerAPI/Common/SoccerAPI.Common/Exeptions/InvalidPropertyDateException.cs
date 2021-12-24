@@ -2,9 +2,9 @@
 {
     using System;
 
-    public class EntityDoesNotExistException : Exception
+    public class InvalidPropertyDateException : Exception
     {
-        public EntityDoesNotExistException(string message)
+        public InvalidPropertyDateException(string message)
             :base(message)
         {
 

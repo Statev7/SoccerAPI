@@ -33,5 +33,15 @@
 
             return false;
         }
+
+        public static bool IsDateValid(DateTime dateTime)
+        {
+            if (DateTime.Compare(dateTime, DateTime.UtcNow) > 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

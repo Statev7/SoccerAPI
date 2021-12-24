@@ -63,11 +63,6 @@
                 .Include(t => t.Coaches)
                 .SingleOrDefaultAsync(t => t.Id == id);
 
-            if (team == null)
-            {
-                throw new EntityDoesNotExistException(ExceptionMessages.TEAM_DOES_NOT_EXIST_ERROR_MESSAGE);
-            }
-
             T mappedTeam = this.Mapper.Map<T>(team);
 
             return mappedTeam;
