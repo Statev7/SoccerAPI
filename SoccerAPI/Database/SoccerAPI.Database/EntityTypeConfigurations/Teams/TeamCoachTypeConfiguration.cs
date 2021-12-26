@@ -5,7 +5,7 @@
 
     using SoccerAPI.Database.Models.Teams;
 
-    public class CoachTypeConfiguration : IEntityTypeConfiguration<Coach>
+    public class TeamCoachTypeConfiguration : IEntityTypeConfiguration<Coach>
     {
         
         public void Configure(EntityTypeBuilder<Coach> builder)

@@ -3,7 +3,7 @@
     using System;
     using System.Threading.Tasks;
 
-    using SoccerAPI.Database.Models.Teams;
+    using SoccerAPI.Database.Models.Championships;
     using SoccerAPI.DTOs.Championship;
 
     public interface IChampionshipService

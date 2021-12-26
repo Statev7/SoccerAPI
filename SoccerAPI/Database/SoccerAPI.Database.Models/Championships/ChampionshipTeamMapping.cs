@@ -1,12 +1,13 @@
-﻿namespace SoccerAPI.Database.Models.Teams
+﻿namespace SoccerAPI.Database.Models.Championships
 {
     using System;
 
     using SoccerAPI.Database.Models.BaseModels;
+    using SoccerAPI.Database.Models.Teams;
 
-    public class TeamChampionshipMapping : BaseModel
+    public class ChampionshipTeamMapping : BaseModel
     {
-        public TeamChampionshipMapping()
+        public ChampionshipTeamMapping()
             :base()
         {
 

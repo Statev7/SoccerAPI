@@ -11,10 +11,10 @@
     using SoccerAPI.Common.Constants;
     using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database;
-    using SoccerAPI.Database.Models.Teams;
+    using SoccerAPI.Database.Models.Championships;
     using SoccerAPI.Services.Database.Contracts;
 
-    public class TeamChampionshipMappingService : BaseService<TeamChampionshipMapping>, ITeamChampionshipMappingService
+    public class TeamChampionshipMappingService : BaseService<ChampionshipTeamMapping>, ITeamChampionshipMappingService
     {
         public TeamChampionshipMappingService(SoccerAPIDbContext dbContext, IMapper mapper) 
             : base(dbContext, mapper)
@@ -39,9 +39,9 @@
             return mapped;
         }
 
-        public async Task<T> AddAsync<T>(TeamChampionshipMapping teamChampionshipMapping)
+        public async Task<T> AddAsync<T>(ChampionshipTeamMapping teamChampionshipMapping)
         {
-            TeamChampionshipMapping mappingModel = this.Mapper.Map<TeamChampionshipMapping>(teamChampionshipMapping);
+            ChampionshipTeamMapping mappingModel = this.Mapper.Map<ChampionshipTeamMapping>(teamChampionshipMapping);
 
             await this.DbSet.AddAsync(mappingModel);
             await this.DbContext.SaveChangesAsync();
@@ -53,7 +53,7 @@
         public async Task<bool> DeleteAsync(Guid championshipId, Guid teamId)
         {
             var championshipTeamReletionToDelete = 
-               await this.GetByChampionshipAndTeamIdAsync<TeamChampionshipMapping>(championshipId, teamId);
+               await this.GetByChampionshipAndTeamIdAsync<ChampionshipTeamMapping>(championshipId, teamId);
 
             this.DbSet.Remove(championshipTeamReletionToDelete);
             await this.DbContext.SaveChangesAsync();

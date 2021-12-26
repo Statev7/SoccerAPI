@@ -4,7 +4,7 @@
 
     using AutoMapper;
 
-    using SoccerAPI.Database.Models.Teams;
+    using SoccerAPI.Database.Models.Championships;
     using SoccerAPI.DTOs.Championship;
 
     public class ChampionshipProfile : Profile
@@ -19,10 +19,10 @@
             this.CreateMap<IEnumerable<Championship>, GetAllChampionshipsDTO>()
                 .ForMember(gac => gac.Championships, t => t.MapFrom(championships => championships));
 
-            this.CreateMap<IEnumerable<TeamChampionshipMapping>, GetAllChampionshipsDTO>()
+            this.CreateMap<IEnumerable<ChampionshipTeamMapping>, GetAllChampionshipsDTO>()
                 .ForMember(gafdto => gafdto.Championships, c => c.MapFrom(championship => championship));
 
-            this.CreateMap<TeamChampionshipMapping, GetChampionshipDTO>()
+            this.CreateMap<ChampionshipTeamMapping, GetChampionshipDTO>()
                 .ForMember(gcdto => gcdto.Id, c => c.MapFrom(tcm => tcm.Championship.Id))
                 .ForMember(gcdto => gcdto.Name, c => c.MapFrom(tcm => tcm.Championship.Name))
                 .ForMember(gcdto => gcdto.TeamsCount, c => c.MapFrom(tcm => tcm.Championship.Teams.Count));

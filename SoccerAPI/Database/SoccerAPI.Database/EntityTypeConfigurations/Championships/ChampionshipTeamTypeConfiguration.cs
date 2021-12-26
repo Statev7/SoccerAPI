@@ -3,11 +3,11 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    using SoccerAPI.Database.Models.Teams;
+    using SoccerAPI.Database.Models.Championships;
 
-    public class TeamChampionshipTypeConfiguration : IEntityTypeConfiguration<TeamChampionshipMapping>
+    public class ChampionshipTeamTypeConfiguration : IEntityTypeConfiguration<ChampionshipTeamMapping>
     {
-        public void Configure(EntityTypeBuilder<TeamChampionshipMapping> builder)
+        public void Configure(EntityTypeBuilder<ChampionshipTeamMapping> builder)
         {
             builder
                 .HasOne(tcm => tcm.Team)

@@ -15,6 +15,7 @@
     using SoccerAPI.Common.Constants.ModelConstants;
     using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database;
+    using SoccerAPI.Database.Models.Championships;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Championship;
     using SoccerAPI.Services.Database.Contracts;
@@ -178,11 +179,11 @@
                     continue;
                 }
 
-                TeamChampionshipMapping teamChampionshipMapping = new TeamChampionshipMapping();
+                ChampionshipTeamMapping teamChampionshipMapping = new ChampionshipTeamMapping();
                 teamChampionshipMapping.TeamId = id;
                 teamChampionshipMapping.ChampionshipId = championshipToUpdate.Id;
 
-                await this.teamChampionshipMapping.AddAsync<TeamChampionshipMapping>(teamChampionshipMapping);
+                await this.teamChampionshipMapping.AddAsync<ChampionshipTeamMapping>(teamChampionshipMapping);
             }
         }
     }

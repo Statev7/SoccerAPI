@@ -1,4 +1,4 @@
-﻿namespace SoccerAPI.Database.Models.Teams
+﻿namespace SoccerAPI.Database.Models.Championships
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -11,7 +11,7 @@
         public Championship()
             :base()
         {
-            this.Teams = new HashSet<TeamChampionshipMapping>();
+            this.Teams = new HashSet<ChampionshipTeamMapping>();
         }
 
         [Required]
@@ -19,6 +19,6 @@
         [MaxLength(ChampionshipConstants.NAME_MAX_LENGHT)]
         public string Name { get; set; }
 
-        public virtual ICollection<TeamChampionshipMapping> Teams { get; set; }
+        public virtual ICollection<ChampionshipTeamMapping> Teams { get; set; }
     }
 }

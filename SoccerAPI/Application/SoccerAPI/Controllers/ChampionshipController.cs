@@ -9,7 +9,7 @@
 
     using SoccerAPI.Common.Constants;
     using SoccerAPI.Common.Exeptions;
-    using SoccerAPI.Database.Models.Teams;
+    using SoccerAPI.Database.Models.Championships;
     using SoccerAPI.DTOs.Championship;
     using SoccerAPI.Services.Database.Contracts;
 
