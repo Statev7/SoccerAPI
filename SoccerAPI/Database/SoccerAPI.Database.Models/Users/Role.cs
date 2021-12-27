@@ -18,6 +18,6 @@
         [MaxLength(RoleConstants.NAME_MAX_LENGHT)]
         public string Name { get; set; }
 
-        public ICollection<UserRoleMapping> Users { get; set; }
+        public virtual ICollection<UserRoleMapping> Users { get; set; }
     }
 }

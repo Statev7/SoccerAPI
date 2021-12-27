@@ -13,9 +13,11 @@
         }
 
         public Guid TeamId { get; set; }
+
         public virtual Team Team { get; set; }
 
         public Guid FootballerId { get; set; }
+
         public virtual Footballer Footballer { get; set; }
     }
 }

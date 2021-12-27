@@ -5,6 +5,7 @@
 
     using SoccerAPI.Common.Constants.ModelConstants;
     using SoccerAPI.Database.Models.BaseModels;
+    using SoccerAPI.Database.Models.Teams;
 
     public class User : BaseModel
     {
@@ -12,6 +13,7 @@
             :base()
         {
             this.Roles = new HashSet<UserRoleMapping>();
+            this.Teams = new HashSet<TeamUserMapping>();
         }
 
         [Required]
@@ -34,6 +36,8 @@
         [Required]
         public string Salt { get; set; }
 
-        public ICollection<UserRoleMapping> Roles { get; set; }
+        public virtual ICollection<UserRoleMapping> Roles { get; set; }
+
+        public virtual ICollection<TeamUserMapping> Teams { get; set; }
     }
 }

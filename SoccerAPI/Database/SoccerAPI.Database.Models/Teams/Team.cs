@@ -16,6 +16,7 @@
             this.Coaches = new HashSet<Coach>();
             this.Footballers = new HashSet<TeamFootballerMapping>();
             this.Championships = new HashSet<ChampionshipTeamMapping>();
+            this.Users = new HashSet<TeamUserMapping>();
         }
 
         [Required]
@@ -42,5 +43,7 @@
         public virtual ICollection<TeamFootballerMapping> Footballers { get; set; }
 
         public virtual ICollection<ChampionshipTeamMapping> Championships { get; set; }
+
+        public virtual ICollection<TeamUserMapping> Users { get; set; }
     }
 }

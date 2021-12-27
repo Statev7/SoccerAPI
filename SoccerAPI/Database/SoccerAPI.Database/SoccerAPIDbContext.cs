@@ -28,6 +28,8 @@
 
         public DbSet<UserRoleMapping> UserRoleMapping { get; set; }
 
+        public DbSet<TeamUserMapping> TeamUserMapping { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
