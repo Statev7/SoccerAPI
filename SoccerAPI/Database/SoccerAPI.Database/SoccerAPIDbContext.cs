@@ -3,13 +3,22 @@
     using System.Reflection;
 
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Options;
 
+    using SoccerAPI.Common;
     using SoccerAPI.Database.Models.Championships;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.Database.Models.Users;
 
     public class SoccerAPIDbContext : DbContext
     {
+        private readonly ApplicationSettings options;
+
+        public SoccerAPIDbContext(IOptions<ApplicationSettings> options)
+        {
+            this.options = options.Value;
+        }
+
         public DbSet<Team> Teams { get; set; }
 
         public DbSet<Coach> Coaches { get; set; }
@@ -35,7 +44,7 @@
             base.OnConfiguring(optionsBuilder);
 
             optionsBuilder
-                .UseSqlServer("Server=.;Database=SoccerAPI;Integrated Security = true;");
+                .UseSqlServer(options.DbConnectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

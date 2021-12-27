@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\SoccerAPI.Common\SoccerAPI.Common.csproj" />
+    <ProjectReference Include="..\..\Database\SoccerAPI.Database.Models\SoccerAPI.Database.Models.csproj" />
   </ItemGroup>
 
 </Project>

@@ -11,6 +11,7 @@
     using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Team;
+    using SoccerAPI.Infrastructure.Filters;
     using SoccerAPI.Services.Database.Contracts;
 
     public class TeamController : BaseAPIController
@@ -20,7 +21,7 @@
         private readonly ITeamCoachService teamCoachService;
 
         public TeamController(
-            ITeamService teamService, 
+            ITeamService teamService,
             ITeamFootballerMappingService teamFootballerMappingService,
             ITeamCoachService teamCoachService)
         {
@@ -36,6 +37,7 @@
         /// <response code="200">Returns all teams</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [JwtAuthorizeAttribute(Roles = new[] { "User" })]
         public async Task<IActionResult> Get()
         {
             GetAllTeamsDTO teams = await this.teamService.GetAllAsync<GetAllTeamsDTO>();

@@ -18,6 +18,7 @@ namespace SoccerAPI
     using Microsoft.Extensions.Logging;
     using Microsoft.OpenApi.Models;
 
+    using SoccerAPI.Common;
     using SoccerAPI.Database;
     using SoccerAPI.Infrastructure.Middlewares;
     using SoccerAPI.Services.Database;
@@ -47,6 +48,8 @@ namespace SoccerAPI
                 c.IncludeXmlComments(xmlPath);
             });
 
+            services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
+
             services.AddDbContext<SoccerAPIDbContext>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -67,6 +70,7 @@ namespace SoccerAPI
             }
 
             app.UseMiddleware<ExceptionMiddleware>();
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseHttpsRedirection();
 
@@ -89,6 +93,7 @@ namespace SoccerAPI
             services.AddScoped<ITeamChampionshipMappingService, TeamChampionshipMappingService>();
             services.AddScoped<ICoachService, CoachService>();
             services.AddScoped<ITeamCoachService, TeamCoachService>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }
