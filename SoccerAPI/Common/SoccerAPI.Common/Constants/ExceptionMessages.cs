@@ -34,10 +34,20 @@
 
         public const string CHAMPIONSHIP_TEAM_MAPPING_DOES_NOT_EXIST_ERROR_MESSAGE = "There is no relation between this champinship and team!";
 
-        public const string FOOTBALLER_INVALID_AGE_ERROR_MESSAGE = "The footballer cannot be younger than {0} years old";
+        public const string FOOTBALLER_INVALID_AGE_ERROR_MESSAGE = "The footballer cannot be younger than {0} years old!";
 
-        public const string COACH_INVALID_AGE_ERROR_MESSAGE = "The coach cannot be younger than {0} years old";
+        public const string COACH_INVALID_AGE_ERROR_MESSAGE = "The coach cannot be younger than {0} years old!";
 
         public const string INVALID_DATE_OF_BIRTH_ERROR_MESSAGE = "Invalid date of birth!";
+
+        public const string USER_DOES_NOT_EXIST_ERROR_MESSAGE = "Such a user does not exist!";
+
+        public const string USER_DOES_NOT_HAVE_PERMISSIONS_ERROR_MESSAGE = "The user does not have permissions on this resource!";
+
+        public const string INVALID_PASSWORD_ERROR_MESSAGE = "Invalid password!";
+
+        public const string EMAIL_ALREADY_REGISTERED_ERROR_MESSAGE = "There is already a registered user with this email!";
+
+        public const string ROLE_DOES_NOT_EXIST_ERROR_MESSAGE = "Such a role does not exist!";
     }
 }
