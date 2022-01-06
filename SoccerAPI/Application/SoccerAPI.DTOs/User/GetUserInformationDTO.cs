@@ -1,11 +1,8 @@
 ﻿namespace SoccerAPI.DTOs.User
 {
     using System;
-    using System.Collections.Generic;
 
-    using SoccerAPI.DTOs.Role;
-
-    public class GetUserForSessionDTO
+    public class GetUserInformationDTO
     {
         public Guid Id { get; set; }
 
@@ -14,7 +11,5 @@
         public string LastName { get; set; }
 
         public string Email { get; set; }
-
-        public IEnumerable<GetRoleFroSessionDTO> Roles { get; set; }
     }
 }

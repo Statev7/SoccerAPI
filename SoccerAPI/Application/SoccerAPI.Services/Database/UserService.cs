@@ -15,6 +15,8 @@
     using Microsoft.IdentityModel.Tokens;
 
     using SoccerAPI.Common;
+    using SoccerAPI.Common.Constants;
+    using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Users;
     using SoccerAPI.DTOs.User;
@@ -23,11 +25,20 @@
     public class UserService : BaseService<User>, IUserService
     {
         private readonly ApplicationSettings options;
+        private readonly IRoleService roleService;
+        private readonly IUserRoleMappingService userRoleMappingService;
 
-        public UserService(SoccerAPIDbContext dbContext, IMapper mapper, IOptions<ApplicationSettings> options)
+        public UserService(
+            SoccerAPIDbContext dbContext, 
+            IMapper mapper, 
+            IOptions<ApplicationSettings> options,
+            IRoleService roleService,
+            IUserRoleMappingService userRoleMappingService)
             : base(dbContext, mapper)
         {
             this.options = options.Value;
+            this.roleService = roleService;
+            this.userRoleMappingService = userRoleMappingService;
         }
 
         public async Task<T> GetUserByEmailAsync<T>(string email)
@@ -39,7 +50,7 @@
 
             if (user == null)
             {
-                throw new ArgumentException();
+                throw new EntityDoesNotExistException(ExceptionMessages.USER_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             T mapped = this.Mapper.Map<T>(user);
@@ -56,7 +67,7 @@
 
             if (user == null)
             {
-                throw new ArgumentException();
+                throw new EntityDoesNotExistException(ExceptionMessages.USER_DOES_NOT_EXIST_ERROR_MESSAGE);
             }
 
             T mapped = this.Mapper.Map<T>(user);
@@ -71,7 +82,7 @@
             string enteredHashedPassword = this.HashPassword(model.Password, user.Salt);
             if (user.PasswordHash != enteredHashedPassword)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(ExceptionMessages.INVALID_PASSWORD_ERROR_MESSAGE);
             }
 
             string jwtToken = this.GenerateJwtToken(user.Id.ToString());
@@ -86,7 +97,7 @@
 
             if (user != null)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(ExceptionMessages.EMAIL_ALREADY_REGISTERED_ERROR_MESSAGE);
             }
 
             User userToRegister = this.Mapper.Map<User>(model);
@@ -97,11 +108,21 @@
             await this.DbSet.AddAsync(userToRegister);
             await this.DbContext.SaveChangesAsync();
 
+            Role role = await this.roleService.GetRoleByNameAsync<Role>(GlobalConstants.USER_ROLE_NAME);
+            Guid roleId = role.Id;
+
+            await this.userRoleMappingService.AddRoleToUserAsync(roleId, userToRegister.Id);
+
             T mapped = this.Mapper.Map<T>(userToRegister);
             return mapped;
         }
 
-        private string GenerateSalt()
+        public Task<bool> IsThereAnyDataAsync()
+        {
+            return this.DbSet.AnyAsync();
+        }
+
+        public string GenerateSalt()
         {
             byte[] saltArray = new byte[128 / 8];
 
@@ -115,7 +136,7 @@
             return salt;
         }
 
-        private string HashPassword(string password, string passwordSalt)
+        public string HashPassword(string password, string passwordSalt)
         {
             var salt = Encoding.ASCII.GetBytes(passwordSalt);
 

@@ -36,7 +36,7 @@
         [Route("register")]
         public async Task<IActionResult> Register(PostUserRegisterDTO model)
         {
-            User user = await this.userService.RegisterAsync<User>(model);
+            GetUserInformationDTO user = await this.userService.RegisterAsync<GetUserInformationDTO>(model);
 
             if (user == null)
             {

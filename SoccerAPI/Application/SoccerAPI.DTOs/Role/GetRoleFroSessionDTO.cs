@@ -1,4 +1,4 @@
-﻿namespace SoccerAPI.DTOs.User
+﻿namespace SoccerAPI.DTOs.Role
 {
     public class GetRoleFroSessionDTO
     {

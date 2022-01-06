@@ -14,5 +14,11 @@
         Task<T> GetByIdAsync<T>(Guid id);
 
         Task<T> GetUserByEmailAsync<T>(string email);
+
+        string GenerateSalt();
+
+        string HashPassword(string password, string passwordSalt);
+
+        Task<bool> IsThereAnyDataAsync();
     }
 }
