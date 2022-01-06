@@ -16,6 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Database\SoccerAPI.Database.Seed\SoccerAPI.Database.Seed\SoccerAPI.Database.Seed.csproj" />
 		<ProjectReference Include="..\..\Database\SoccerAPI.Database\SoccerAPI.Database.csproj" />
 		<ProjectReference Include="..\SoccerAPI.DTOs\SoccerAPI.DTOs.csproj" />
 		<ProjectReference Include="..\SoccerAPI.Services\SoccerAPI.Services.csproj" />

@@ -5,6 +5,8 @@
 
 	using Microsoft.AspNetCore.Mvc.Filters;
 
+    using SoccerAPI.Common.Constants;
+    using SoccerAPI.Common.Exeptions;
     using SoccerAPI.DTOs.User;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
@@ -15,11 +17,6 @@
 		public void OnAuthorization(AuthorizationFilterContext context)
 		{
 			var user = (GetUserForSessionDTO)context.HttpContext.Items["User"];
-
-			if (user == null)
-			{
-				throw new ArgumentException();
-			}
 
 			bool isInRole = false;
 			for (int index = 0; index < Roles.Length; index++)
@@ -36,8 +33,7 @@
 
 			if (isInRole == false)
 			{
-				//TODO: Add new exception 
-				throw new ArgumentException();
+				throw new ArgumentException(ExceptionMessages.USER_DOES_NOT_HAVE_PERMISSIONS_ERROR_MESSAGE);
 			}
 		}
 	}
