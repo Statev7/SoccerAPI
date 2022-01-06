@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Application\SoccerAPI.Services\SoccerAPI.Services.csproj" />
+    <ProjectReference Include="..\..\SoccerAPI.Database.Models\SoccerAPI.Database.Models.csproj" />
+  </ItemGroup>
+
+</Project>
