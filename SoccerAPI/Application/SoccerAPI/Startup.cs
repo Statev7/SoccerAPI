@@ -115,7 +115,7 @@ namespace SoccerAPI
 
                 using (dbContext)
                 {
-                    dbContext.Database.Migrate();
+                   await dbContext.Database.MigrateAsync();
                 }
             }
         }
