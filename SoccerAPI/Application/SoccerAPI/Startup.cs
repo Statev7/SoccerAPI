@@ -12,6 +12,7 @@ namespace SoccerAPI
     using Microsoft.AspNetCore.HttpsPolicy;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -19,10 +20,16 @@ namespace SoccerAPI
     using Microsoft.OpenApi.Models;
 
     using SoccerAPI.Common;
+    using SoccerAPI.Common.Constants;
     using SoccerAPI.Database;
+    using SoccerAPI.Database.Models.Users;
+    using SoccerAPI.Database.Seed;
+    using SoccerAPI.DTOs.User;
     using SoccerAPI.Infrastructure.Middlewares;
     using SoccerAPI.Services.Database;
     using SoccerAPI.Services.Database.Contracts;
+
+    using static SoccerAPI.Database.Seed.Launcher;
 
     public class Startup
     {
@@ -67,6 +74,8 @@ namespace SoccerAPI
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SoccerAPI v1"));
+                MigrateDatabase(app).GetAwaiter().GetResult();
+                SeedDatabaseAsync(app).GetAwaiter().GetResult();
             }
 
             app.UseMiddleware<ExceptionMiddleware>();
@@ -83,7 +92,6 @@ namespace SoccerAPI
                 endpoints.MapControllers();
             });
         }
-
         private void AddDatabaseServices(IServiceCollection services)
         {
             services.AddScoped<ITeamService, TeamService>();
@@ -94,6 +102,22 @@ namespace SoccerAPI
             services.AddScoped<ICoachService, CoachService>();
             services.AddScoped<ITeamCoachService, TeamCoachService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IUserRoleMappingService, UserRoleMappingService>();
+        }
+
+        private static async Task MigrateDatabase(IApplicationBuilder app)
+        {
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var service = scope.ServiceProvider;
+                var dbContext = service.GetRequiredService<SoccerAPIDbContext>();
+
+                using (dbContext)
+                {
+                    dbContext.Database.Migrate();
+                }
+            }
         }
     }
 }
