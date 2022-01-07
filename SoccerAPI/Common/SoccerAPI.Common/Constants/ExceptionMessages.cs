@@ -49,5 +49,7 @@
         public const string EMAIL_ALREADY_REGISTERED_ERROR_MESSAGE = "There is already a registered user with this email!";
 
         public const string ROLE_DOES_NOT_EXIST_ERROR_MESSAGE = "Such a role does not exist!";
+
+        public const string USER_UNAUTHENTICATED_MESSAGE = "Log in before continue!";
     }
 }
