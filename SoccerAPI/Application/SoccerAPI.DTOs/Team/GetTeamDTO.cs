@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using SoccerAPI.DTOs.Championship;
+    using SoccerAPI.DTOs.Coach;
     using SoccerAPI.DTOs.Footballer;
 
     public class GetTeamDTO
@@ -26,6 +27,6 @@
 
         public GetAllChampionshipsDTO Championships { get; set; }
 
-        public int CoachesCount { get; set; }
+        public GetAllCoachesDTO Coaches { get; set; }
     }
 }

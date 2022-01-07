@@ -1,6 +1,7 @@
 ﻿namespace SoccerAPI.Infrastructure.AutoMapperProfiles
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using AutoMapper;
 

@@ -23,5 +23,9 @@
         public string StrongLeg { get; set; }
 
         public int TeamsCount { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime? UpdatedOn { get; set; }
     }
 }
