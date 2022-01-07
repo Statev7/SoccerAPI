@@ -123,6 +123,7 @@
         /// <response code="200">If the coach is updated successfully</response>
         /// <response code="400">If the coach is not correct</response>
         [HttpPut]
+        [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [JwtAuthorize(Roles = new[] { GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
