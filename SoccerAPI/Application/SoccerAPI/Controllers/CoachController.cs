@@ -11,6 +11,7 @@
     using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Coach;
+    using SoccerAPI.Infrastructure.Filters;
     using SoccerAPI.Services.Database.Contracts;
 
     public class CoachController : BaseAPIController
@@ -29,6 +30,7 @@
         /// <response code="200">Returns all coaches</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Get()
         {
             GetAllCoachesDTO coaches = await this.service.GetAllAsync<GetAllCoachesDTO>();
@@ -48,6 +50,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Get(Guid id)
         {
             GetCoachDTO coach = await this.service.GetByIdAsync<GetCoachDTO>(id);
@@ -83,9 +86,9 @@
         /// <response code="400">If the body is not correct</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Post(PostCoachDTO model)
         {
-            //TODO Add validation for age!
             Coach coach = await this.service.AddAsync(model);
 
             if (this.ModelState.IsValid == false)
@@ -122,6 +125,7 @@
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Put(Guid id, PutCoachDTO model)
         {
             bool result = await this.service.UpdateAsync(id, model);
@@ -160,6 +164,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Patch(Guid id, PatchCoachDTO model)
         {
             bool result = await this.service.PartialUpdateAsync(id, model);
@@ -183,6 +188,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Delete(Guid id)
         {
             bool result = await this.service.DeleteAsync(id);

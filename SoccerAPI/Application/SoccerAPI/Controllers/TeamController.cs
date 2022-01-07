@@ -37,7 +37,7 @@
         /// <response code="200">Returns all teams</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [JwtAuthorizeAttribute(Roles = new[] { "User" })]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Get()
         {
             GetAllTeamsDTO teams = await this.teamService.GetAllAsync<GetAllTeamsDTO>();
@@ -57,6 +57,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Get(Guid id)
         {
             GetTeamDTO team = await this.teamService.GetByIdAsync<GetTeamDTO>(id);
@@ -90,6 +91,7 @@
         /// <response code="400">If the body is not correct</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Post(PostTeamDTO team)
         {
             Team createdTeam = await this.teamService.AddAsync(team);
@@ -121,6 +123,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Put(Guid id, PutTeamDTO team)
         {
             bool result = await this.teamService.UpdateAsync(id, team);
@@ -163,6 +166,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Patch(Guid id, PatchTeamDTO team)
         {
             bool result = await this.teamService.PartialUpdateAsync(id, team);
@@ -192,6 +196,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Delete(Guid id)
         {
             bool result = await this.teamService.DeleteAsync(id);
@@ -214,6 +219,7 @@
 		/// <response code="400">If there is no relation</response>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Delete(Guid teamId, Guid footballerId)
         {
             bool result = await this.teamFootballerMappingService.DeleteAsync(teamId, footballerId);
@@ -232,6 +238,7 @@
         [HttpDelete]
         [Route("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> DeleteCoach(Guid teamId, Guid coachId)
         {
             bool result = await this.teamCoachService.DeleteAsync(teamId, coachId);

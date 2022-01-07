@@ -1,14 +1,17 @@
 ﻿namespace SoccerAPI.Controllers
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     using SoccerAPI.Common.Constants;
+    using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Footballer;
+    using SoccerAPI.Infrastructure.Filters;
     using SoccerAPI.Services.Database.Contracts;
 
     public class FootballerController : BaseAPIController
@@ -27,6 +30,7 @@
         /// <response code="200">Returns all footballers</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Get()
         {
             GetAllFootballersDTO footballers = await this.footballerService.GetAllAsync<GetAllFootballersDTO>();
@@ -46,6 +50,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Get(Guid id)
         {
             GetFootballerDTO footballer = await this.footballerService.GetByIdAsync<GetFootballerDTO>(id);
@@ -83,9 +88,16 @@
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Post(PostFootballerDTO footballer)
         {
             Footballer footballerToCreate = await this.footballerService.AddAsync(footballer);
+
+            if (this.ModelState.IsValid == false)
+            {
+                var expections = this.ModelState.Values.SelectMany(e => e.Errors);
+                throw new ModelException(expections);
+            }
 
             return this.CreatedAtRoute(this.RouteData, footballerToCreate);
         }
@@ -117,6 +129,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Put(Guid id, PutFootballerDTO footballer)
         {
             bool result = await this.footballerService.UpdateAsync(id, footballer);
@@ -156,6 +169,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Patch(Guid id, PatchFootballerDTO footballer)
         {
             bool result = await this.footballerService.PartialUpdateAsync(id, footballer);
@@ -174,6 +188,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Delete(Guid id)
         {
             bool result =  await this.footballerService.DeleteAsync(id);

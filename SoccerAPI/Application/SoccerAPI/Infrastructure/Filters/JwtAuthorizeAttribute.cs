@@ -18,6 +18,11 @@
 		{
 			var user = (GetUserForSessionDTO)context.HttpContext.Items["User"];
 
+            if (user == null)
+            {
+				throw new UnauthorizedAccessCustomException(ExceptionMessages.USER_DOES_NOT_HAVE_PERMISSIONS_ERROR_MESSAGE);
+			}
+
 			bool isInRole = false;
 			for (int index = 0; index < Roles.Length; index++)
 			{
@@ -33,7 +38,7 @@
 
 			if (isInRole == false)
 			{
-				throw new ArgumentException(ExceptionMessages.USER_DOES_NOT_HAVE_PERMISSIONS_ERROR_MESSAGE);
+				throw new UnauthorizedAccessCustomException(ExceptionMessages.USER_DOES_NOT_HAVE_PERMISSIONS_ERROR_MESSAGE);
 			}
 		}
 	}

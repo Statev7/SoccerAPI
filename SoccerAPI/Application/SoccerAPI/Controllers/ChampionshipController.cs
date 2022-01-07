@@ -11,6 +11,7 @@
     using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Database.Models.Championships;
     using SoccerAPI.DTOs.Championship;
+    using SoccerAPI.Infrastructure.Filters;
     using SoccerAPI.Services.Database.Contracts;
 
     public class ChampionshipController : BaseAPIController
@@ -33,6 +34,7 @@
         /// <response code="200">Returns all championships</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Get()
         {
             GetAllChampionshipsDTO championshoips = await this.championshipService.GetAllAsync<GetAllChampionshipsDTO>();
@@ -52,6 +54,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Get(Guid id)
         {
             GetChampionshipDTO championship = await this.championshipService.GetByIdAsync<GetChampionshipDTO>(id);
@@ -82,6 +85,7 @@
         /// <response code="400">If the body is not correct</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Post(PostChampionshipDTO model)
         {
             Championship championship = await this.championshipService.AddAsync(model);
@@ -110,6 +114,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Put(Guid id, PutChampionshipDTO model)
         {
             bool result = await this.championshipService.UpdateAsync(id, model);
@@ -146,6 +151,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Patch(Guid id, PatchChampionshipDTO model)
         {
             bool result = await this.championshipService.PartialUpdateAsync(id, model);
@@ -175,6 +181,7 @@
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Delete(Guid id)
         {
             bool result = await this.championshipService.DeleteAsync(id);
@@ -196,6 +203,7 @@
 		/// <response code="200">If the relation is deleted successfully</response>
 		/// <response code="400">If there is no relation</response>
         [HttpDelete]
+        [JwtAuthorize(Roles = new[] {GlobalConstants.EDITOR_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
         public async Task<IActionResult> Delete(Guid championshipId, Guid teamId)
         {
             bool result = await this.teamChampionshipMappingService.DeleteAsync(championshipId, teamId);

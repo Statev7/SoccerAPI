@@ -51,6 +51,9 @@
 				case InvalidPropertyDateException:
 					context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 					break;
+				case UnauthorizedAccessCustomException:
+					context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+					break;
 			}
 
 			errorDetails.StatusCode = context.Response.StatusCode;
