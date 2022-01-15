@@ -1,30 +1,22 @@
 namespace SoccerAPI
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.HttpsPolicy;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
     using Microsoft.OpenApi.Models;
 
     using SoccerAPI.Common;
-    using SoccerAPI.Common.Constants;
     using SoccerAPI.Database;
-    using SoccerAPI.Database.Models.Users;
-    using SoccerAPI.Database.Seed;
-    using SoccerAPI.DTOs.User;
+    using SoccerAPI.Infrastructure.Filters;
     using SoccerAPI.Infrastructure.Middlewares;
     using SoccerAPI.Services.Database;
     using SoccerAPI.Services.Database.Contracts;
@@ -48,6 +40,17 @@ namespace SoccerAPI
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SoccerAPI", Version = "v1" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = $"JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below. Example: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.OperationFilter<AuthResponsesOperationFilter>();
 
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
