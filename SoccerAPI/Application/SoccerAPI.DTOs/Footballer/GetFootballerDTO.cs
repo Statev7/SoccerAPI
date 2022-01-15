@@ -2,6 +2,8 @@
 {
     using System;
 
+    using SoccerAPI.Validator;
+
     public class GetFootballerDTO
     {
         public Guid Id { get; set; }
@@ -14,7 +16,7 @@
 
         public DateTime DateOfBirth { get; set; }
 
-        public int Age => DateTime.UtcNow.Year - this.DateOfBirth.Year;
+        public int Age => Validator.CalculateAge(this.DateOfBirth, DateTime.UtcNow);
 
         public decimal Salary { get; set; }
 

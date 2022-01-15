@@ -18,7 +18,7 @@
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Team;
     using SoccerAPI.Services.Database.Contracts;
-    using SoccerAPI.Services.Validator;
+    using SoccerAPI.Validator;
 
     public class TeamService : BaseService<Team>, ITeamService
     {

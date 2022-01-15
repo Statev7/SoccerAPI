@@ -12,11 +12,11 @@
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Footballer;
-    using SoccerAPI.Services.Validator;
     using SoccerAPI.Services.Database.Contracts;
     using SoccerAPI.Common.Exeptions;
     using SoccerAPI.Common.Constants;
     using SoccerAPI.Common.Constants.ModelConstants;
+    using SoccerAPI.Validator;
 
     public class FootballerService : BaseService<Footballer>, IFootballerService
     {

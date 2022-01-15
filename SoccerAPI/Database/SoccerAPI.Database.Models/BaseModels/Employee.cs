@@ -17,7 +17,7 @@
         [MaxLength(EmployeeConstants.SECOND_NAME_MAX_LENGHT)]
         public string SecondName { get; set; }
 
-        public string FullName => this.FirstName + " " + this.SecondName;
+        public string FullName => $"{this.FirstName} {this.SecondName}";
 
         [Required]
         [MinLength(EmployeeConstants.NATIONALITY_MIN_LENGHT)]
@@ -27,10 +27,11 @@
         [Required]
         public DateTime DateOfBirth { get; set; }
 
-        public int Age => DateTime.UtcNow.Year - this.DateOfBirth.Year;
+        public int Age => SoccerAPI.Validator.Validator.CalculateAge(this.DateOfBirth, DateTime.UtcNow);
 
         [Required]
         [Range(typeof(decimal), EmployeeConstants.SALARY_MIN_VALUE, EmployeeConstants.SALARY_MAX_VALUE)]
         public decimal Salary { get; set; }
+
     }
 }

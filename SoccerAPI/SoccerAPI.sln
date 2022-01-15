@@ -21,7 +21,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{AEE2F7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoccerAPI.Common", "Common\SoccerAPI.Common\SoccerAPI.Common.csproj", "{D8697EB8-6A45-4805-A756-D8D3C59534D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoccerAPI.Database.Seed", "Database\SoccerAPI.Database.Seed\SoccerAPI.Database.Seed\SoccerAPI.Database.Seed.csproj", "{3B48E3CC-1DF4-47FB-BF1F-1551AAAAAD2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoccerAPI.Database.Seed", "Database\SoccerAPI.Database.Seed\SoccerAPI.Database.Seed\SoccerAPI.Database.Seed.csproj", "{3B48E3CC-1DF4-47FB-BF1F-1551AAAAAD2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoccerAPI.Validator", "Common\SoccerAPI.Validator\SoccerAPI.Validator\SoccerAPI.Validator.csproj", "{4C104DEA-4C96-4199-83ED-ABEBC8A4FDCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{3B48E3CC-1DF4-47FB-BF1F-1551AAAAAD2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B48E3CC-1DF4-47FB-BF1F-1551AAAAAD2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B48E3CC-1DF4-47FB-BF1F-1551AAAAAD2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C104DEA-4C96-4199-83ED-ABEBC8A4FDCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C104DEA-4C96-4199-83ED-ABEBC8A4FDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C104DEA-4C96-4199-83ED-ABEBC8A4FDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C104DEA-4C96-4199-83ED-ABEBC8A4FDCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{0EBA6CC0-EA81-4B82-9DAE-4F627FBE2EB3} = {7E76C7EC-8237-403F-82C8-0C881DBA1D29}
 		{D8697EB8-6A45-4805-A756-D8D3C59534D0} = {AEE2F790-BDD8-4C94-AAED-0A1053E06748}
 		{3B48E3CC-1DF4-47FB-BF1F-1551AAAAAD2A} = {3BD8913D-3E1B-47C9-90CB-3FF17D7689DE}
+		{4C104DEA-4C96-4199-83ED-ABEBC8A4FDCB} = {AEE2F790-BDD8-4C94-AAED-0A1053E06748}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0B3F0956-102E-4D07-B45C-987FA4C611C4}

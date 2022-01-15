@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\SoccerAPI.Validator\SoccerAPI.Validator\SoccerAPI.Validator.csproj" />
     <ProjectReference Include="..\..\Database\SoccerAPI.Database.Models\SoccerAPI.Database.Models.csproj" />
     <ProjectReference Include="..\..\Database\SoccerAPI.Database\SoccerAPI.Database.csproj" />
     <ProjectReference Include="..\SoccerAPI.DTOs\SoccerAPI.DTOs.csproj" />

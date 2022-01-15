@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\SoccerAPI.Common\SoccerAPI.Common.csproj" />
+    <ProjectReference Include="..\..\Common\SoccerAPI.Validator\SoccerAPI.Validator\SoccerAPI.Validator.csproj" />
   </ItemGroup>
 
 </Project>

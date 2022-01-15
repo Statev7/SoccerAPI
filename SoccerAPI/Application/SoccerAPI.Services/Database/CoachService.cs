@@ -11,7 +11,7 @@
     using Microsoft.EntityFrameworkCore;
 
     using SoccerAPI.Common.Constants;
-    using SoccerAPI.Services.Validator;
+    using SoccerAPI.Validator;
     using SoccerAPI.Database;
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Coach;

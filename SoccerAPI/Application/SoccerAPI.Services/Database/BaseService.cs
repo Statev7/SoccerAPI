@@ -13,7 +13,7 @@
     {
         private readonly IActionContextAccessor actionContextAccessor;
 
-        public BaseService(SoccerAPIDbContext dbContext, IMapper mapper)
+        protected BaseService(SoccerAPIDbContext dbContext, IMapper mapper)
         {
             this.DbContext = dbContext;
             this.DbSet = dbContext.Set<T>();

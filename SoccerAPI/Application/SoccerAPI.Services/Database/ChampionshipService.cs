@@ -19,7 +19,7 @@
     using SoccerAPI.Database.Models.Teams;
     using SoccerAPI.DTOs.Championship;
     using SoccerAPI.Services.Database.Contracts;
-    using SoccerAPI.Services.Validator;
+    using SoccerAPI.Validator;
 
     public class ChampionshipService : BaseService<Championship>, IChampionshipService
     {

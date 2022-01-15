@@ -1,4 +1,4 @@
-﻿namespace SoccerAPI.Services.Validator
+﻿namespace SoccerAPI.Validator
 {
     using System;
 
@@ -42,6 +42,18 @@
             }
 
             return true;
+        }
+
+        public static int CalculateAge(DateTime birthDate, DateTime now)
+        {
+            int age = now.Year - birthDate.Year;
+
+            if (now.Month < birthDate.Month || (now.Month == birthDate.Month && now.Day < birthDate.Day))
+            {
+                age--;
+            }
+
+            return age;
         }
     }
 }
